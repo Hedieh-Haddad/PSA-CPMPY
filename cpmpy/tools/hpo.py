@@ -88,7 +88,8 @@ class Probe:
 
     def Tuning_global_timeout(self, global_timeout, tuning_timeout_type, solution_list, round_counter, probe_timeout):
         if tuning_timeout_type == "Static":
-            probe_timeout = global_timeout
+            # probe_timeout = 0.2 * global_timeout
+            probe_timeout = global_timeout # This is probing timeout itself
         elif tuning_timeout_type == "Dynamic":
             if self.unchanged_count < 8 and round_counter < self.max_tries:
                 if solution_list and solution_list[-2] == solution_list[-1]:
@@ -213,48 +214,60 @@ class Probe:
             print("current timeout:", current_timeout)
             params = opt.ask()
             parameters = point_asdict(self.all_config, params) if total_time_used != 0 else self.default_config
-            print(parameters)
-            self.solution_list.append({'params': dict(parameters)})
-            if self.stop == "Timeout": # "First_Solution" , "Timeout"
-                solver.solve(**parameters, time_limit=current_timeout)
-            elif self.stop == "First_Solution" :
-                solver.solve(**parameters)
-            if solver.objective_value() is not None:
-                print("solve_call_counter is plus 1")
-                solve_call_counter += 1
-                self.first_non_none_objective = True
-            # if solver.status().exitstatus == ExitStatus.OPTIMAL:
-            print("Objective Value", solver.objective_value())
-            if self.mode == "minimize":
-                if (solver.objective_value() is not None and solver.objective_value() < best) or (solver.objective_value() == best and (self.best_runtime is None or solver.status().runtime < self.best_runtime)):
-                    best = solver.objective_value()
-                    self.best_params = parameters
-                    self.best_runtime = solver.status().runtime
+            print("parameters:",parameters)
+            seen = False
+            for solution in self.solution_list:
+                if solution.get('params') == parameters:
+                    seen = True
+                    print("solution.get('objective')",solution.get('objective'))
+                    obj = solution.get('objective')
+                    runtime = solution.get('runtime')
+                    status = solution.get('status')
+                    break
+            if seen:
+                print("Parameters seen before. Using stored results.")
+                # self.solution_list.append(
+                #     {'params': dict(parameters), 'objective': obj, 'runtime': runtime, 'status': status})
+                total_time_used += 1
             else:
-                if (solver.objective_value() is not None and solver.objective_value() > best) or (solver.objective_value() == best and (
-                        self.best_runtime is None or solver.status().runtime < self.best_runtime)):
-                    best = solver.objective_value()
-                    self.best_params = parameters
-                    self.best_runtime = solver.status().runtime
-            total_time_used += current_timeout
-            print("total_time_used", total_time_used)
-            print("current_timeout", current_timeout)
-            obj = solver.objective_value() if solve_call_counter > 0 else None
-            if obj is None:
-                obj = best
-                if not first_non_none_objective:
-                    current_timeout = Probe.round_timeout_evolution(self, self.time_evol, current_timeout)
-                    current_timeout = round(current_timeout, 2)
-                    if self.tuning_timeout_type == "Static" and current_timeout > self.probe_timeout - total_time_used:
-                        current_timeout = self.probe_timeout - total_time_used
-            else:
-                obj = int(obj)
-                first_non_none_objective = True
-            self.solution_list.append({
-                'objective': solver.objective_value(),
-                'runtime': solver.status().runtime,
-                'status': solver.status().exitstatus
-            })
+                if self.stop == "Timeout":# "First_Solution" , "Timeout"
+                    solver.solve(**parameters, time_limit=current_timeout)
+                elif self.stop == "First_Solution":
+                    solver.solve(**parameters)
+                if solver.objective_value() is not None:
+                    print("solve_call_counter is plus 1")
+                    solve_call_counter += 1
+                    self.first_non_none_objective = True
+                if self.mode == "minimize":
+                    if (solver.objective_value() is not None and solver.objective_value() < best) or (solver.objective_value() == best and (self.best_runtime is None or solver.status().runtime < self.best_runtime)):
+                        best = solver.objective_value()
+                        self.best_params = parameters
+                        self.best_runtime = solver.status().runtime
+                else:
+                    if (solver.objective_value() is not None and solver.objective_value() > best) or (solver.objective_value() == best and (
+                            self.best_runtime is None or solver.status().runtime < self.best_runtime)):
+                        best = solver.objective_value()
+                        self.best_params = parameters
+                        self.best_runtime = solver.status().runtime
+                total_time_used += current_timeout
+                obj = solver.objective_value() if solve_call_counter > 0 else None
+                if obj is None:
+                    obj = best
+                    if not first_non_none_objective:
+                        current_timeout = Probe.round_timeout_evolution(self, self.time_evol, current_timeout)
+                        current_timeout = round(current_timeout, 2)
+                        if self.tuning_timeout_type == "Static" and current_timeout > self.probe_timeout - total_time_used:
+                            current_timeout = self.probe_timeout - total_time_used
+                else:
+                    obj = int(obj)
+                    first_non_none_objective = True
+                self.solution_list.append({
+                    'params': dict(parameters),
+                    'objective': solver.objective_value(),
+                    'runtime': solver.status().runtime,
+                    'status': solver.status().exitstatus
+                })
+                obj = -obj if self.mode == "maximize" else obj
             if self.tuning_timeout_type == "Dynamic":
                 probe_timeout, self.none_change_flag = Probe.Tuning_global_timeout(self, self.global_timeout, self.tuning_timeout_type, self.solution_list, round_counter, self.probe_timeout)
                 if self.none_change_flag:
@@ -262,13 +275,11 @@ class Probe:
             if self.tuning_timeout_type == "Static" and total_time_used >= self.probe_timeout:
                 print("Timeout reached. Exiting.")
                 break
-            obj = -obj if self.mode == "maximize" else obj
             opt.tell(params, obj)
             round_counter += 1
         solve_call_counter += 1
         best_params = point_asdict(self.all_config, opt.Xi[np.argmin(opt.yi)])
         best_params.update(best_params)
-        # print(self.best_params, self.best_runtime)
         return self.best_params, self.best_runtime
 
     def get_best_params_and_runtime(self):

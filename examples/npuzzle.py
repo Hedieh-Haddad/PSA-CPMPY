@@ -1,3 +1,14 @@
+import sys
+import os
+
+print("Python version:", sys.version)
+print("Current working directory:", os.getcwd())
+print("Script path:", __file__)
+
+import numpy as np
+from cpmpy import *
+from cpmpy.tools import ParameterTuner
+
 import numpy as np
 from cpmpy import *
 from cpmpy.tools import ParameterTuner
