@@ -75,7 +75,7 @@ else:
 print(m.status())
 
 tunables = {
-    "search_branching": [0],
+    "search_branching": [0, 1, 2, 3, 4, 5, 6, 7],
     "linearization_level": [0, 1],
     'symmetry_level': [0, 1, 2]}
 
@@ -98,7 +98,7 @@ user_params = {
     "init_round_type": "Static",  # "Dynamic", "Static" , "None"
     "stop_type": "Timeout",  # "First_Solution" , "Timeout"
     "tuning_timeout_type": "Static",  # "Static" , "Dynamic", "None"
-    "time_evol": "Dynamic_Geometric",  # "Static", "Dynamic_Geometric" , "Dynamic_Luby"
+    "time_evol": "Static",  # "Static", "Dynamic_Geometric" , "Dynamic_Luby"
     "HPO": "Bayesian",  # "Hamming", "Bayesian", "Grid"
 }
 

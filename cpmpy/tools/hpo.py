@@ -91,11 +91,15 @@ class Probe:
             # probe_timeout = 0.2 * global_timeout
             probe_timeout = global_timeout # This is probing timeout itself
         elif tuning_timeout_type == "Dynamic":
-            if self.unchanged_count < 8 and round_counter < self.max_tries:
-                if solution_list and solution_list[-2] == solution_list[-1]:
-                    self.unchanged_count += 1
-                else:
-                    self.unchanged_count = 0
+            print("self.unchanged_count", self.unchanged_count)
+            if round_counter < self.max_tries:
+                if len(self.solution_list) > 1:
+                    if self.solution_list[-1].get('objective') == self.solution_list[-2].get('objective'):
+                        self.unchanged_count += 1
+                    else:
+                        self.unchanged_count = 0
+                if self.unchanged_count >= 8:
+                    self.none_change_flag = True
             else:
                 self.none_change_flag = True
 
@@ -214,7 +218,8 @@ class Probe:
             print("current timeout:", current_timeout)
             params = opt.ask()
             parameters = point_asdict(self.all_config, params) if total_time_used != 0 else self.default_config
-            print("parameters:",parameters)
+            # print("parameters:",parameters)
+            print("self.solution_list:",self.solution_list)
             seen = False
             for solution in self.solution_list:
                 if solution.get('params') == parameters:
@@ -269,8 +274,15 @@ class Probe:
                 })
                 obj = -obj if self.mode == "maximize" else obj
             if self.tuning_timeout_type == "Dynamic":
-                probe_timeout, self.none_change_flag = Probe.Tuning_global_timeout(self, self.global_timeout, self.tuning_timeout_type, self.solution_list, round_counter, self.probe_timeout)
+                probe_timeout, self.none_change_flag = Probe.Tuning_global_timeout(self, self.global_timeout,
+                                                                                   self.tuning_timeout_type,
+                                                                                   self.solution_list,
+                                                                                   round_counter,
+                                                                                   self.probe_timeout)
+
                 if self.none_change_flag:
+                    print("I am hereeeeeeeeeeeee")
+                    total_time_used = self.probe_timeout
                     break
             if self.tuning_timeout_type == "Static" and total_time_used >= self.probe_timeout:
                 print("Timeout reached. Exiting.")
