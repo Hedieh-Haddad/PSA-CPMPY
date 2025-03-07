@@ -44,6 +44,9 @@ def nqueens_solve(N, prettyprint=True):
             print(out)
     else:
         print("No solution found")
+    min_distance = min([abs(queens[i] - queens[j]) + abs(i - j) for i in range(N) for j in range(i + 1, N)])
+    m.maximize(min_distance)
+
     return m
 
 
