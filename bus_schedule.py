@@ -59,7 +59,7 @@ user_params = {
 params = {**default_params, **user_params}
 
 best_params = tuner.tune(
-    time_limit=40,
+    time_limit=120,
     max_tries=10,
     **params
 )

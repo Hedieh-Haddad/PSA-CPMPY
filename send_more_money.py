@@ -13,15 +13,24 @@ import numpy as np
 from cpmpy.tools import ParameterTuner
 
 # Construct the model.
-s,e,n,d,m,o,r,y = intvar(0,9, shape=8)
+s,e,n,d,m,o,r,y,a,b,c,f,g,h,i,j,k,l,p,q,t,u,v,w,x,z = intvar(0,9, shape=26)
 
 model = Model(
-    AllDifferent([s,e,n,d,m,o,r,y]),
+    AllDifferent([s,e,n,d,m,o,r,y,a,b,c,f,g,h,i,j,k,l,p,q,t,u,v,w,x,z]),
     (    sum(   [s,e,n,d] * np.array([       1000, 100, 10, 1]) ) \
        + sum(   [m,o,r,e] * np.array([       1000, 100, 10, 1]) ) \
       == sum( [m,o,n,e,y] * np.array([10000, 1000, 100, 10, 1]) ) ),
     s > 0,
     m > 0,
+    # Additional constraints
+    a + b == c,
+    f + g == h,
+    i + j == k,
+    l + m == n,
+    o + p == q,
+    r + s == t,
+    u + v == w,
+    x + y == z,
 )
 
 print(model)
@@ -34,7 +43,7 @@ if model.solve():
     print("M,O,N,E,Y =", [x.value() for x in [m,o,n,e,y]])
 else:
     print("No solution found")
-objective = sum([s, e, n, d, m, o, r, y])
+objective = sum([s, e, n, d, m, o, r, y, a, b, c, f, g, h, i, j, k, l, p, q, t, u, v, w, x, z])
 model.minimize(objective)
 
 tunables = {
@@ -58,17 +67,17 @@ default_params = {
     "HPO": "Bayesian"
 }
 user_params = {
-    "init_round_type": "Static",  # "Dynamic", "Static" , "None"
+    "init_round_type": "Dynamic",  # "Dynamic", "Static" , "None"
     "stop_type": "Timeout",  # "First_Solution" , "Timeout"
     "tuning_timeout_type": "Static",  # "Static" , "Dynamic", "None"
     "time_evol": "Static",  # "Static", "Dynamic_Geometric" , "Dynamic_Luby"
-    "HPO": "Bayesian",  # "Hamming", "Bayesian", "Grid"
+    "HPO": "Hamming",  # "Hamming", "Bayesian", "Grid"
 }
 
 params = {**default_params, **user_params}
 
 best_params = tuner.tune(
-    time_limit=40,
+    time_limit=120,
     max_tries=10,
     **params
 )

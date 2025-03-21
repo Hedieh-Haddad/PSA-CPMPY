@@ -22,10 +22,9 @@ from cpmpy.tools import ParameterTuner
 
 
 # Data
-v,b = 7,7
-r,k = 3,3
-l = 1
-
+v, b = 11, 11
+r, k = 5, 5
+l = 2
 
 # Variables, incidence matrix
 block = boolvar(shape=(v,b), name="block")
@@ -70,21 +69,18 @@ default_params = {
     "init_round_type": "Static",
     "stop_type": "Timeout",
     "tuning_timeout_type": "Static",
-    "time_evol": "Dynamic_Geometric",
-    "HPO": "Bayesian"
-}
+    "time_evol": "Dynamic_Geometric"}
 user_params = {
-    "init_round_type": "Static",  # "Dynamic", "Static" , "None"
+    "init_round_type": "Dynamic",  # "Dynamic", "Static" , "None"
     "stop_type": "Timeout",  # "First_Solution" , "Timeout"
     "tuning_timeout_type": "Static",  # "Static" , "Dynamic", "None"
-    "time_evol": "Static",  # "Static", "Dynamic_Geometric" , "Dynamic_Luby"
-    "HPO": "Bayesian",  # "Hamming", "Bayesian", "Grid"
+    "time_evol": "Static" # "Static", "Dynamic_Geometric" , "Dynamic_Luby"
 }
 
 params = {**default_params, **user_params}
 
 best_params = tuner.tune(
-    time_limit=40,
+    time_limit=120,
     max_tries=10,
     **params
 )

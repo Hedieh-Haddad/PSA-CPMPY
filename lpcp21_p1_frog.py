@@ -8,7 +8,7 @@ import requests # to get the data
 import numpy as np
 from cpmpy import *
 from cpmpy.tools import ParameterTuner
-
+import time
 
 # Nice example of planning-as-sat (for fixed step length),
 # 3D tensors, numpy indexing, and vectorized constraints
@@ -77,7 +77,7 @@ def get_instance(n):
     return (S,I,J,grid)
 
 if __name__ == "__main__":
-    inst = 1
+    inst = 2
     print(f"Getting instance {inst}")
     (S,I,J,grid) = get_instance(inst)
     print(grid, S,I,J)
@@ -93,43 +93,40 @@ if __name__ == "__main__":
         # frog will be nr '2'
         print(frogpos[i].value() + freepos[i].value())
 
+    tunables = {
+        "search_branching": [0, 1, 2, 3, 4, 5, 6],
+        "linearization_level": [0, 1],
+        'symmetry_level': [0, 1, 2]}
 
-tunables = {
-    "search_branching": [0, 1, 2, 3, 4, 5, 6, 7],
-    "linearization_level": [0, 1],
-    'symmetry_level': [0, 1, 2]}
+    defaults = {
+        "search_branching": 7,
+        "linearization_level": 0,
+        'symmetry_level': 1}
 
-defaults = {
-    "search_branching": 7,
-    "linearization_level": 0,
-    'symmetry_level': 1}
+    solver = "ortools"
+    tuner = ParameterTuner(solver, model, tunables, defaults)
 
-solver = "ortools"
-tuner = ParameterTuner(solver, model, tunables, defaults)
+    default_params = {
+        "init_round_type": "Static",
+        "stop_type": "Timeout",
+        "tuning_timeout_type": "Static",
+        "time_evol": "Dynamic_Geometric",
+    }
+    user_params = {
+        "init_round_type": "Dynamic",  # "Dynamic", "Static" , "None"
+        "stop_type": "Timeout",  # "First_Solution" , "Timeout"
+        "tuning_timeout_type": "Static",  # "Static" , "Dynamic", "None"
+        "time_evol": "Static"  # "Static", "Dynamic_Geometric" , "Dynamic_Luby"
+    }
 
-default_params = {
-    "init_round_type": "Static",
-    "stop_type": "Timeout",
-    "tuning_timeout_type": "Static",
-    "time_evol": "Dynamic_Geometric",
-    "HPO": "Bayesian"
-}
-user_params = {
-    "init_round_type": "Static",  # "Dynamic", "Static" , "None"
-    "stop_type": "Timeout",  # "First_Solution" , "Timeout"
-    "tuning_timeout_type": "Static",  # "Static" , "Dynamic", "None"
-    "time_evol": "Static",  # "Static", "Dynamic_Geometric" , "Dynamic_Luby"
-    "HPO": "Bayesian",  # "Hamming", "Bayesian", "Grid"
-}
+    params = {**default_params, **user_params}
 
-params = {**default_params, **user_params}
+    best_params = tuner.tune(
+        time_limit=1200,
+        max_tries=20,
+        **params
+    )
+    best_runtime = tuner.best_runtime
 
-best_params = tuner.tune(
-    time_limit=40,
-    max_tries=10,
-    **params
-)
-best_runtime = tuner.best_runtime
-
-print(best_params)
-print(best_runtime)
+    print(best_params)
+    print(best_runtime)

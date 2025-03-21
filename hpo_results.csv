@@ -1,0 +1,4 @@
+problem,Global_timeout,Mode,objective_Hamming,run_time_Hamming,best_configuration_Hamming,objective_BO,run_time_BO,best_configuration_BO,objective_Grid,run_time_Grid,best_configuration_Grid,Best_HPO_Method
+nqueens,120,maximize,-10000000000.0,68.144441,"{'search_branching': array([7, 0, 1])}",7.0,33.893730000000005,"{'search_branching': 7, 'linearization_level': 0, 'symmetry_level': 1}",,,,Bayesian
+lpcp21_p1_frog,120,minimize,78.0,1.741603,"{'search_branching': 3, 'linearization_level': 1, 'symmetry_level': 0}",25.0,0.051707,"OrderedDict([('linearization_level', 0), ('search_branching', 2), ('symmetry_level', 0)])",10000000000.0,0.033384,"{'search_branching': 6, 'linearization_level': 1, 'symmetry_level': 0}",Bayesian
+bibd,120,minimize,11.0,0.022137,"{'search_branching': 3, 'linearization_level': 1, 'symmetry_level': 0}",11.0,0.021985,"OrderedDict([('linearization_level', 1), ('search_branching', 2), ('symmetry_level', 0)])",,,,Bayesian

@@ -45,7 +45,7 @@ def n_puzzle(puzzle_start, puzzle_end, N):
 
     return (m,x)
 
-N = 20
+N = 1000
 (m,x) = n_puzzle(puzzle_start, puzzle_end, N)
 is_sol = [all((x[i] == puzzle_end).flat) for i in range(N)]
 m.maximize( sum(i*is_sol[i] for i in range(N)) )
@@ -77,21 +77,19 @@ default_params = {
     "init_round_type": "Static",
     "stop_type": "Timeout",
     "tuning_timeout_type": "Static",
-    "time_evol": "Dynamic_Geometric",
-    "HPO": "Bayesian"
+    "time_evol": "Dynamic_Geometric"
 }
 user_params = {
-    "init_round_type": "Static",  # "Dynamic", "Static" , "None"
+    "init_round_type": "Dynamic",  # "Dynamic", "Static" , "None"
     "stop_type": "Timeout",  # "First_Solution" , "Timeout"
     "tuning_timeout_type": "Static",  # "Static" , "Dynamic", "None"
-    "time_evol": "Dynamic_Geometric",  # "Static", "Dynamic_Geometric" , "Dynamic_Luby"
-    "HPO": "Bayesian",  # "Hamming", "Bayesian", "Grid"
+    "time_evol": "Dynamic_Geometric"  # "Static", "Dynamic_Geometric" , "Dynamic_Luby"
 }
 
 params = {**default_params, **user_params}
 
 best_params = tuner.tune(
-    time_limit=40,
+    time_limit=120,
     max_tries=10,
     **params
 )

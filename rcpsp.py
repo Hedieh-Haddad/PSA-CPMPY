@@ -1,19 +1,44 @@
 #!/usr/bin/python3
 from cpmpy import *
 from cpmpy.tools import ParameterTuner
+import numpy as np
 
 # toy model taken from :
 # https://python-mip.readthedocs.io/en/latest/examples.html#resource-constrained-project-scheduling
 # ported to CPMpy by Guillaume Poveda
 
 # Data
-durations = cpm_array([0, 3, 2, 5, 4, 2, 3, 4, 2, 4, 6, 0])
+# durations = cpm_array([0, 3, 2, 5, 4, 2, 3, 4, 2, 4, 6, 0])
+# durations = cpm_array([0, 5, 3, 8, 6, 4, 7, 6, 5, 9, 10, 3, 6, 8, 5, 7, 4, 3, 5, 8, 9, 4, 7, 5, 6, 8, 9, 7, 3, 0])
+#
+# # resource_needs = cpm_array([[0, 0], [5, 1], [0, 4], [1, 4], [1, 3], [3, 2], [3, 1], [2, 4], [4, 0], [5, 2], [2, 5], [0, 0]])
+# #
+# # resource_capacities = cpm_array([6, 8])
+# resource_needs = np.random.randint(0, 6, size=(30, 3))
+# resource_capacities = cpm_array([10, 12, 15])  # More resources
+#
+# # successors_link = cpm_array([[0, 1], [0, 2], [0, 3], [1, 4], [1, 5], [2, 9], [2, 10], [3, 8], [4, 6], [4, 7], [5, 9], [5, 10], [6, 8], [6, 9], [7, 8], [8, 11], [9, 11], [10, 11]])
+# successors_link = cpm_array([
+#     [0, 1], [0, 2], [1, 3], [1, 4], [2, 5], [3, 6], [3, 7], [4, 8], [5, 9], [5, 10],
+#     [6, 11], [7, 12], [8, 13], [9, 14], [10, 15], [11, 16], [12, 17], [13, 18], [14, 19],
+#     [15, 20], [16, 21], [17, 22], [18, 23], [19, 24], [20, 25], [21, 26], [22, 27],
+#     [23, 28], [24, 29], [28, 29]
+# ])
+durations = cpm_array([0] + list(np.random.randint(5, 15, size=99)))  # Jobs with random durations between 5 and 15
 
-resource_needs = cpm_array([[0, 0], [5, 1], [0, 4], [1, 4], [1, 3], [3, 2], [3, 1], [2, 4], [4, 0], [5, 2], [2, 5], [0, 0]])
+# Expanded resource needs (100 jobs x 5 resources for higher complexity)
+resource_needs = np.random.randint(0, 6, size=(100, 5))  # 5 resources for 100 jobs
+resource_capacities = cpm_array([30, 40, 50, 60, 70])  # More resources
 
-resource_capacities = cpm_array([6, 8])
+# More complex precedence constraints (randomized for 100 jobs)
+successors_link = []
+for i in range(100):
+    for j in range(i + 1, 100):
+        if np.random.rand() < 0.2:  # 20% chance to create a dependency between jobs
+            successors_link.append([i, j])
 
-successors_link = cpm_array([[0, 1], [0, 2], [0, 3], [1, 4], [1, 5], [2, 9], [2, 10], [3, 8], [4, 6], [4, 7], [5, 9], [5, 10], [6, 8], [6, 9], [7, 8], [8, 11], [9, 11], [10, 11]])
+successors_link = cpm_array(successors_link)
+
 
 nb_resource = len(resource_capacities)
 nb_jobs = len(durations)
@@ -80,7 +105,7 @@ default_params = {
     "HPO": "Bayesian"
 }
 user_params = {
-    "init_round_type": "Static",  # "Dynamic", "Static" , "None"
+    "init_round_type": "Dynamic",  # "Dynamic", "Static" , "None"
     "stop_type": "Timeout",  # "First_Solution" , "Timeout"
     "tuning_timeout_type": "Static",  # "Static" , "Dynamic", "None"
     "time_evol": "Static",  # "Static", "Dynamic_Geometric" , "Dynamic_Luby"
@@ -90,7 +115,7 @@ user_params = {
 params = {**default_params, **user_params}
 
 best_params = tuner.tune(
-    time_limit=40,
+    time_limit=120,
     max_tries=10,
     **params
 )

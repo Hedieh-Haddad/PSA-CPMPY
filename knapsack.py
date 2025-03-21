@@ -9,11 +9,11 @@ from cpmpy import *
 from cpmpy.tools import ParameterTuner
 
 # Problem data
-n = 10
+n = 2000
 np.random.seed(1)
-values = np.random.randint(0,10, n)
-weights = np.random.randint(1,5, n)
-capacity = np.random.randint(sum(weights)*.2, sum(weights)*.5)
+values = np.random.randint(0,90, n)
+weights = np.random.randint(1,60, n)
+capacity = np.random.randint(sum(weights)*.4, sum(weights)*.5)
 
 # Construct the model.
 x = boolvar(shape=n, name="x")
@@ -23,6 +23,7 @@ m = Model(
         maximize=
             sum(x*values)
         )
+m.maximize(sum(x*values))
 
 print("Value:", m.solve()) # solve returns objective value
 print(f"Capacity: {capacity}, used: {sum(x.value()*weights)}")
@@ -55,7 +56,7 @@ default_params = {
     "HPO": "Bayesian"
 }
 user_params = {
-    "init_round_type": "Static",  # "Dynamic", "Static" , "None"
+    "init_round_type": "Dynamic",  # "Dynamic", "Static" , "None"
     "stop_type": "Timeout",  # "First_Solution" , "Timeout"
     "tuning_timeout_type": "Static",  # "Static" , "Dynamic", "None"
     "time_evol": "Static",  # "Static", "Dynamic_Geometric" , "Dynamic_Luby"
@@ -65,7 +66,7 @@ user_params = {
 params = {**default_params, **user_params}
 
 best_params = tuner.tune(
-    time_limit=40,
+    time_limit=120,
     max_tries=10,
     **params
 )

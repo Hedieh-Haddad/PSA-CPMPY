@@ -45,13 +45,13 @@ def nqueens_solve(N, prettyprint=True):
     else:
         print("No solution found")
     min_distance = min([abs(queens[i] - queens[j]) + abs(i - j) for i in range(N) for j in range(i + 1, N)])
+    print("min_distance", min_distance)
     m.maximize(min_distance)
-
     return m
 
 
 # if __name__ == "__main__":
-N = 8
+N = 32
 m = nqueens_solve(N)
 
 tunables = {
@@ -71,26 +71,23 @@ default_params = {
     "init_round_type": "Static",
     "stop_type": "Timeout",
     "tuning_timeout_type": "Static",
-    "time_evol": "Dynamic_Geometric",
-    "HPO": "Bayesian"
+    "time_evol": "Dynamic_Geometric"
 }
 user_params = {
-    "init_round_type": "Static",  # "Dynamic", "Static" , "None"
+    "init_round_type": "Dynamic",  # "Dynamic", "Static" , "None"
     "stop_type": "Timeout",  # "First_Solution" , "Timeout"
     "tuning_timeout_type": "Static",  # "Static" , "Dynamic", "None"
-    "time_evol": "Static",  # "Static", "Dynamic_Geometric" , "Dynamic_Luby"
-    "HPO": "Bayesian",  # "Hamming", "Bayesian", "Grid"
+    "time_evol": "Dynamic_Geometric"  # "Static", "Dynamic_Geometric" , "Dynamic_Luby"
 }
 
 params = {**default_params, **user_params}
 
 best_params = tuner.tune(
-    time_limit=40,
-    max_tries=10,
+    time_limit=120,
+    max_tries=30,
     **params
 )
 best_runtime = tuner.best_runtime
 
 print(best_params)
 print(best_runtime)
-

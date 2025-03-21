@@ -26,10 +26,14 @@ def compute_euclidean_distance_matrix(locations):
                                (from_node[1] - to_node[1]))))
     return distances.astype(int)
 
-locations= [
-    (288, 149), (288, 129), (270, 133), (256, 141), (256, 163), (246, 157),
-    (236, 169), (228, 169), (228, 148), (220, 164), (212, 172), (204, 159)
-]
+# locations= [
+#     (288, 149), (288, 129), (270, 133), (256, 141), (256, 163), (246, 157),
+#     (236, 169), (228, 169), (228, 148), (220, 164), (212, 172), (204, 159)
+# ]
+np.random.seed(42)  # For reproducibility
+num_locations = 100  # Try 500 for an even harder problem!
+locations = [(np.random.randint(0, 1000), np.random.randint(0, 1000)) for _ in range(num_locations)]
+
 distance_matrix = compute_euclidean_distance_matrix(locations)
 n_city = len(locations)
 
@@ -86,7 +90,7 @@ default_params = {
     "HPO": "Bayesian"
 }
 user_params = {
-    "init_round_type": "Static",  # "Dynamic", "Static" , "None"
+    "init_round_type": "Dynamic",  # "Dynamic", "Static" , "None"
     "stop_type": "Timeout",  # "First_Solution" , "Timeout"
     "tuning_timeout_type": "Static",  # "Static" , "Dynamic", "None"
     "time_evol": "Static",  # "Static", "Dynamic_Geometric" , "Dynamic_Luby"
@@ -96,7 +100,7 @@ user_params = {
 params = {**default_params, **user_params}
 
 best_params = tuner.tune(
-    time_limit=40,
+    time_limit=120,
     max_tries=10,
     **params
 )

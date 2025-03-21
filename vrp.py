@@ -25,17 +25,27 @@ def compute_euclidean_distance_matrix(locations):
 
 # data
 depot = 0
-locations= [
-        (288, 149), (288, 129), (270, 133), (256, 141), (256, 163),
-        (236, 169), (228, 169), (228, 148), (220, 164)
+# locations= [
+#         (288, 149), (288, 129), (270, 133), (256, 141), (256, 163),
+#         (236, 169), (228, 169), (228, 148), (220, 164)
+# ]
+# # Pickup demand of each location
+# demand = [0,3,4,8,8,10,5,3,9] # depot has no demand
+locations = [
+    (288, 149), (288, 129), (270, 133), (256, 141), (256, 163),
+    (236, 169), (228, 169), (228, 148), (220, 164), (200, 150),
+    (180, 130), (160, 110), (140, 90), (120, 70), (100, 50),
+    (80, 30), (60, 10), (40, -10), (20, -30)
 ]
-# Pickup demand of each location 
-demand = [0,3,4,8,8,10,5,3,9] # depot has no demand
+
+# Pickup demand of each location
+demand = [0, 3, 4, 8, 8, 10, 5, 3, 9, 7, 6, 5, 4, 3, 2, 8, 7, 6, 5, 4] # depot has no demand
 distance_matrix = compute_euclidean_distance_matrix(locations)
 
 n_city = len(locations)
 # 3 vehicles and capacity of each vehicle 20
-n_vehicle, q = 3, 20
+# n_vehicle, q = 3, 20
+n_vehicle, q = 5, 20
 
 
 # x[i,j] = 1 means that a vehicle goes from node i to node j 
@@ -48,7 +58,7 @@ model = Model(
     sum(x[0,:]) <= n_vehicle,
     # vehicle leaves and enter each node i exactly once 
     [sum(x[i,:])==1 for i in range(1,n_city)],
-    [sum(x[:,i])==1 for i in range(1,n_city)],
+    [sum(x[:,i])<=1 for i in range(1,n_city)],
     # no self visits
     [sum(x[i,i] for i in range(n_city))==0],
 
@@ -112,7 +122,7 @@ default_params = {
     "HPO": "Bayesian"
 }
 user_params = {
-    "init_round_type": "Static",  # "Dynamic", "Static" , "None"
+    "init_round_type": "Dynamic",  # "Dynamic", "Static" , "None"
     "stop_type": "Timeout",  # "First_Solution" , "Timeout"
     "tuning_timeout_type": "Static",  # "Static" , "Dynamic", "None"
     "time_evol": "Static",  # "Static", "Dynamic_Geometric" , "Dynamic_Luby"
@@ -122,7 +132,7 @@ user_params = {
 params = {**default_params, **user_params}
 
 best_params = tuner.tune(
-    time_limit=40,
+    time_limit=120,
     max_tries=10,
     **params
 )

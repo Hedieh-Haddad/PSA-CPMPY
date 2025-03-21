@@ -114,7 +114,6 @@ class CPM_ortools(SolverInterface):
         """
         return self.ort_model
 
-
     def solve(self, time_limit=None, assumptions=None, solution_callback=None, **kwargs):
         """
             Call the CP-SAT solver
@@ -245,7 +244,6 @@ class CPM_ortools(SolverInterface):
         self.solve(enumerate_all_solutions=True, solution_callback=cb, time_limit=time_limit, **kwargs)
         return cb.solution_count()
 
-
     def solver_var(self, cpm_var):
         """
             Creates solver variable for cpmpy variable
@@ -270,7 +268,6 @@ class CPM_ortools(SolverInterface):
             self._varmap[cpm_var] = revar
 
         return self._varmap[cpm_var]
-
 
     def objective(self, expr, minimize):
         """

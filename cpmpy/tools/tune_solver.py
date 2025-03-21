@@ -21,7 +21,7 @@ import numpy as np
 
 from ..solvers.utils import SolverLookup, param_combinations
 from ..solvers.solver_interface import ExitStatus
-from cpmpy.tools.hpo import *
+from cpmpy.tools.PSA import *
 
 
 class ParameterTuner:
@@ -42,7 +42,8 @@ class ParameterTuner:
         if self.all_params is None:
             self.all_params = SolverLookup.lookup(solvername).tunable_params()
             self.best_params = SolverLookup.lookup(solvername).default_params()
-
+        print(self.all_params)
+        print(self.best_params)
 
     def tune(self, time_limit=None, max_tries=None, fix_params={}, **kwargs):
         """
@@ -63,7 +64,6 @@ class GridSearchTuner(ParameterTuner):
 
     def __init__(self, solvername, model, all_params=None, defaults=None):
         super().__init__(solvername, model, all_params, defaults)
-
     def tune(self, time_limit=None, max_tries=None, fix_params={}):
         """
             :param: time_limit: Time budget to run tuner in seconds. Solver will be interrupted when time budget is exceeded
