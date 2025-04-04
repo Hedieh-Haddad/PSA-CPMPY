@@ -27,6 +27,7 @@ from .gcs import CPM_gcs
 from .pysdd import CPM_pysdd
 from .exact import CPM_exact
 from .choco import CPM_choco
+from .ace import CPM_ace
 
 def param_combinations(all_params, remaining_keys=None, cur_params=None):
     """
@@ -78,6 +79,7 @@ class SolverLookup():
                 ("pysdd", CPM_pysdd),
                 ("exact", CPM_exact),
                 ("choco", CPM_choco),
+                ("ace", CPM_ace),
                ]
 
     @classmethod
@@ -134,7 +136,7 @@ class SolverLookup():
 
 # using `builtin_solvers` is DEPRECATED, use `SolverLookup` object instead
 # Order matters! first is default, then tries second, etc...
-builtin_solvers = [CPM_ortools, CPM_gurobi, CPM_minizinc, CPM_pysat, CPM_exact, CPM_choco]
+builtin_solvers = [CPM_ortools, CPM_gurobi, CPM_minizinc, CPM_pysat, CPM_exact, CPM_choco, CPM_ace]
 def get_supported_solvers():
     """
         Returns a list of solvers supported on this machine.

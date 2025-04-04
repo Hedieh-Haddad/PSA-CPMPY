@@ -93,23 +93,17 @@ if __name__ == "__main__":
         # frog will be nr '2'
         print(frogpos[i].value() + freepos[i].value())
 
-    tunables = {
-        "search_branching": [0, 1, 2, 3, 4, 5, 6],
-        "linearization_level": [0, 1],
-        'symmetry_level': [0, 1, 2]}
+    tunables = {}
 
-    defaults = {
-        "search_branching": 7,
-        "linearization_level": 0,
-        'symmetry_level': 1}
+    defaults = {}
 
-    solver = "ortools"
+    solver = ""
     tuner = ParameterTuner(solver, model, tunables, defaults)
 
     default_params = {
-        "init_round_type": "Static",
+        "init_round_type": "Dynamic",
         "stop_type": "Timeout",
-        "tuning_timeout_type": "Static",
+        "tuning_timeout_type": "static",
         "time_evol": "Dynamic_Geometric",
     }
     user_params = {
@@ -122,7 +116,7 @@ if __name__ == "__main__":
     params = {**default_params, **user_params}
 
     best_params = tuner.tune(
-        time_limit=1200,
+        time_limit=120,
         max_tries=20,
         **params
     )

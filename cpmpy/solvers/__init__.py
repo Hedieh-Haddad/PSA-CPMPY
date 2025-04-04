@@ -56,5 +56,6 @@ from .pysdd import CPM_pysdd
 from .z3 import CPM_z3
 from .exact import CPM_exact
 from .choco import CPM_choco
+from .ace import CPM_ace
 from .gcs import CPM_gcs
 

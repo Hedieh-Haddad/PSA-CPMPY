@@ -69,17 +69,11 @@ display(x.value())
 
 
 
-tunables = {
-    "search_branching": [0, 1, 2, 3, 4, 5, 6, 7],
-    "linearization_level": [0, 1],
-    'symmetry_level': [0, 1, 2]}
+tunables = {}
 
-defaults = {
-    "search_branching": 7,
-    "linearization_level": 0,
-    'symmetry_level': 1}
+defaults = {}
 
-solver = "ortools"
+solver = ""
 tuner = ParameterTuner(solver, model, tunables, defaults)
 
 default_params = {

@@ -51,17 +51,11 @@ assert model.solve(), "Model is UNSAT!"
 print("Gold:", gold.value()) # solve returns objective value
 print("successor vars:",s.value())
 
-tunables = {
-    "search_branching": [0, 1, 2, 3, 4, 5, 6, 7],
-    "linearization_level": [0, 1],
-    'symmetry_level': [0, 1, 2]}
+tunables = {}
 
-defaults = {
-    "search_branching": 7,
-    "linearization_level": 0,
-    'symmetry_level': 1}
+defaults = {}
 
-solver = "ortools"
+solver = ""
 tuner = ParameterTuner(solver, model, tunables, defaults)
 
 default_params = {
@@ -82,7 +76,7 @@ user_params = {
 params = {**default_params, **user_params}
 
 best_params = tuner.tune(
-    time_limit=120,
+    time_limit=1200,
     max_tries=10,
     **params
 )

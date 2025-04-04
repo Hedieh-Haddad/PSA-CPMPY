@@ -10,10 +10,12 @@ import numpy as np
 from ..solvers.utils import SolverLookup, param_combinations
 from ..solvers.solver_interface import ExitStatus
 import pandas as pd
+from pychoco import solver as chocosolver
 import matplotlib.pyplot as plt
 from scipy.stats import wilcoxon
 
 class Probe:
+    @staticmethod
     def geometric_sequence(i):
         return 1.2 * i
 
@@ -29,21 +31,21 @@ class Probe:
         self.solvername = solvername
         self.time_limit = time_limit
         self.model = model
-        self.mode = "minimize" if self.model.objective_is_min else "maximize"
-        print(os.path.basename(sys.argv[0]))
         self.problem_name = os.path.splitext(os.path.basename(sys.argv[0]))[0]
         self.script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
         self.relative_path = os.path.join(self.script_dir, os.path.basename(sys.argv[0]))
-        print(len(sys.argv))
-        print(sys.argv[0])
-        print(sys.argv[1])
-        print(sys.argv[2])
-        if len(sys.argv) >= 2 :
+        if len(sys.argv) > 2:
             self.HPO = sys.argv[1]
             self.solver_name = sys.argv[2]
+        elif len(sys.argv) == 2:
+            self.HPO = sys.argv[1]
+            self.solver_name = self.solvername or "ortools"
         else:
             self.HPO = "Hamming"
-            self.solver_name = "ortools"
+            self.solver_name = self.solvername or "ortools"
+        if not all_config or not default_config or all_config == {} or default_config == {} or solvername is None or solvername=="":
+            all_config , default_config = self.set_hp(self.solver_name)
+        self.mode = "minimize" if self.model.objective_is_min else "maximize"
         self.global_timeout = time_limit
         self.max_tries = max_tries
         self.all_config = all_config
@@ -51,11 +53,9 @@ class Probe:
         self.param_order = list(self.all_config.keys())
         self.best_config = self._params_to_np([self.default_config])
         self.best_config_str = self.dict_to_string(self.default_config)
-        # print("self.best_config_str", self.best_config_str)
         self.probe_timeout = None
         self.solving_time = None
         self.round_timeout = None
-        # self.best_obj = None
         self.best_obj = 1e10 if self.mode == "minimize" else -1e10
         self.timeout_list = []
         self.none_change_flag = False
@@ -64,30 +64,47 @@ class Probe:
         self.fix_params = fix_params
         self.best_params = None
         self.best_runtime = None
+        round_counter = total_time_used = 0
         self.default_flag = True
         self.additional_params = kwargs
-        print("self.additional_params", self.additional_params, self.HPO)
+        print("self.additional_params", self.additional_params, self.HPO, self.solver_name)
         self.init_round_type = kwargs.get('init_round_type', None)
         self.stop_type = kwargs.get('stop_type', None)
         self.tuning_timeout_type = kwargs.get('tuning_timeout_type', None)
         self.time_evol = kwargs.get('time_evol', None)
-        # self.HPO = kwargs.get('HPO', None)
-        self.results_file = "hpo_results.csv"
-        self.round_timeout = Probe.initialize_round_timeout(self, self.solvername, self.model, self.init_round_type)
+        self.results_file = f"hpo_result_{self.solver_name}.csv"
+        #######################
+        if self.solver_name == "ace":
+            print("self.relative_path", self.relative_path)
+            cmd = ["python3", self.relative_path, ]
+        # if self.data:
+        #     cmd.append(f"-data=modelsXCSP22/COP/{self.model}/{self.data}")
+        # if self.dataparser:
+        #     cmd.append(f"-dataparser=modelsXCSP22/COP/{self.model}/{self.dataparser}.py")
+        # start_time = time.time()
+        # try:
+            output = subprocess.run(cmd, universal_newlines=True, text=True, capture_output=True)
+            print(output)
+        #######################
+        if self.tuning_timeout_type == "Static":
+            self.probe_timeout, self.none_change_flag = Probe.Tuning_global_timeout(self, self.global_timeout, self.tuning_timeout_type, self.solution_list, round_counter, total_time_used)
+        print("self.probe_timeout",self.probe_timeout)
+        if self.HPO != "freesearch":
+            self.round_timeout = Probe.initialize_round_timeout(self, self.solver_name, self.model, self.init_round_type)
+        print("self.probe_timeout", self.probe_timeout)
         self.stop = Probe.stop_condition(self, self.stop_type)
-        # if self.HPO is None:
-        #     self.HPO = "Hamming"
         if self.HPO == "Hamming":
             Probe.Hamming_Distance(self)
         elif self.HPO == "Bayesian":
             Probe.Bayesian_Optimization(self)
         elif self.HPO == "Grid":
             Probe.Grid_Search(self)
+        elif self.HPO == "freesearch":
+            Probe.free_search(self)
         Probe.save_result(self)
 
-
-    def set_hp(self):
-        if self.solver_name == "ortools":
+    def set_hp(self, solver_name):
+        if solver_name == "ortools":
             tunables = {
                 'optimize_with_core': [False, True],
                 'search_branching': [0, 1, 2, 3, 4, 5, 6],
@@ -115,15 +132,37 @@ class Probe:
                 'minimization_algorithm': 2,
                 'use_phase_saving': True
                 }
-        elif self.solver_name == "choco":
+        elif solver_name == "choco":
             tunables = {
-                "solution_limit": [None, 100, 500, 1000],
+                "solution_limit": [None, 0, 100, 500, 1000],
                 "node_limit": [None, 1000, 5000, 10000],
                 "fail_limit": [None, 100, 500, 1000],
-                "restart_limit": [None, 10, 50, 100],
-                "backtrack_limit": [None, 100, 500, 1000]
+                "restart_limit": [None],
+                "backtrack_limit": [None]
             }
+            defaults = {
+                "solution_limit": None,
+                "node_limit": None,
+                "fail_limit": None,
+                "restart_limit": None,
+                "backtrack_limit": None
+            }
+            for key in tunables:
+                tunables[key] = [None if v is None else int(v) for v in tunables[key]]
+            for key in defaults:
+                defaults[key] = None if defaults[key] is None else int(defaults[key])
 
+            defaults = {key: defaults[key] for key in defaults}
+            tunables = {key: tunables[key] for key in tunables}
+
+        elif solver_name == "ace":
+            tunables = {
+                "solution_limit": [None, 0, 100, 500, 1000],
+                "node_limit": [None, 1000, 5000, 10000],
+                "fail_limit": [None, 100, 500, 1000],
+                "restart_limit": [None],
+                "backtrack_limit": [None]
+            }
             defaults = {
                 "solution_limit": None,
                 "node_limit": None,
@@ -132,38 +171,20 @@ class Probe:
                 "backtrack_limit": None
             }
 
+        return tunables, defaults
 
-    def initialize_round_timeout(self, solvername, model, type):
+    def initialize_round_timeout(self, solver_name, model, round_type):
         if self.HPO == "Hamming":
-            type = "Dynamic"
-        if type == "Dynamic":
-            if solvername == "ortools":
-                solver = SolverLookup.get(solvername, model)
-                solver.solve(**self.default_config)
-            elif solvername == "choco":
-                print("self.relative_path", self.relative_path)
-                print("**self.best_config_str", self.best_config_str)
-                solver = SolverLookup.get(solvername, model)
-                solver.solve(**self.default_config)
-            #     # cmd = ["java", "-jar", f"/Users/hedieh.haddad/Desktop/GITHUB/PSA-CPMPY/cpmpy/solvers/choco.jar", self.relative_path, "-f","-csv"]
-            #     cmd = ["python", self.relative_path,"-f","-csv"]
-            #     # print("model", model)
-            #     # cmd = ["python", self.relative_path]
-            #     # # cmd.append(f"-valsel=[{valh},true,16,true]")
-            #     # # cmd.append(f"-varsel=[{varh},tie,32]")
-            #     # cmd.append("-lc=1")
-            #     # cmd.append(f"-restarts=[luby,500,50000,true]")
-            #     # if varh == "Solver_Default" and valh == "Solver_Default":
-            #     #     cmd = ["java", "-jar", f"../../choco-solver-4.10.14/choco-solver/choco.jar", config.model, "-f",
-            #     #            "-csv", f"-limit {probe_time}"]
-            #     #     cmd.append("-lc=1")
-            #     # cmd.append(f"-restarts=[luby,500,50000,true]")
-            #     output = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-            #     print(output.stdout)
-            # output.kill()
+            round_type = "Dynamic"
+        if round_type == "Dynamic":
+            solver = SolverLookup.get(solver_name, model)
+            solver.solve(time_limit=self.probe_timeout ,**self.default_config)
+            print("First_round_obj",solver.objective_value())
+            print("First_round_runtime",solver.status().runtime)
             self.base_runtime = solver.status().runtime
             self.round_timeout = self.base_runtime
-        elif type == "Static":
+            self.probe_timeout = round(self.probe_timeout-solver.status().runtime, 3)
+        elif round_type == "Static":
             self.round_timeout = 5
         else:
             self.round_timeout = self.time_limit
@@ -186,14 +207,13 @@ class Probe:
             round_timeout = self.luby_sequence(index, current_timeout, self.timeout_list)
         return round_timeout
 
-    def Tuning_global_timeout(self, global_timeout, tuning_timeout_type, solution_list, round_counter, probe_timeout, total_time_used):
+    def Tuning_global_timeout(self, global_timeout, tuning_timeout_type, solution_list, round_counter, total_time_used):
         if tuning_timeout_type == "Static":
-            probe_timeout = 0.2 * global_timeout
-            self.solving_time = global_timeout - probe_timeout
-            # probe_timeout = global_timeout # This is probing timeout itself
+            self.probe_timeout = global_timeout * 0.2
+            self.solving_time = global_timeout - self.probe_timeout
         elif tuning_timeout_type == "Dynamic":
             print("self.unchanged_count", self.unchanged_count)
-            if round_counter < self.max_tries:
+            if round_counter < self.max_tries and total_time_used < self.probe_timeout:
                 if len(self.solution_list) > 1:
                     if self.solution_list[-1].get('objective') == self.solution_list[-2].get('objective'):
                         self.unchanged_count += 1
@@ -205,7 +225,7 @@ class Probe:
             else:
                 self.none_change_flag = True
 
-        return probe_timeout, self.none_change_flag
+        return self.probe_timeout, self.none_change_flag
 
     def memory(self):
         print("MEMORY")
@@ -235,13 +255,18 @@ class Probe:
         self.best_runtime = self.round_timeout
         # Ensure random start
         np.random.shuffle(combos_np)
-        total_time_used = 0
+        total_time_used = current_timeout = 0
         i = 0
+        print("self.max_tries",self.max_tries)
         if self.max_tries is None:
             self.max_tries = len(combos_np)
-        while len(combos_np) and i < self.max_tries and total_time_used < self.global_timeout:
+                # while len(combos_np) and i < self.max_tries and total_time_used < self.global_timeout:
+        print("self.global_timeout",self.global_timeout)
+        print("self.probe_timeout",self.probe_timeout)
+        while (i < self.max_tries if hasattr(self,
+                                             'max_tries') else True) and total_time_used + current_timeout < self.probe_timeout:
             # Make new solver total_time_used += current_timeout
-            solver = SolverLookup.get(self.solvername, self.model)
+            solver = SolverLookup.get(self.solver_name, self.model)
             # Apply scoring to all combos
             scores = self._get_score(combos_np)
             max_idx = np.where(scores == scores.min())[0][0]
@@ -258,7 +283,14 @@ class Probe:
             if self.time_limit is not None:
                 timeout = min(timeout, self.time_limit - (time.time() - start_time))
             # run solver
-            solver.solve(**params_dict, time_limit=timeout)
+            if self.solver_name == "ortools":
+                solver.solve(**params_dict, time_limit=timeout)
+            elif self.solver_name == "choco":
+                if timeout < 0.5 :
+                    timeout = 0.5
+                best_params = {key: value for key, value in params_dict.items() if value is not None}
+                best_params = {key: int(value) for key, value in best_params.items()}
+                solver.solve(time_limit=timeout, **{k: int(v) for k, v in best_params.items()})
             if solver.status().exitstatus == ExitStatus.OPTIMAL and solver.status().runtime < self.best_runtime:
                 self.best_runtime = solver.status().runtime
                 # update surrogate
@@ -272,12 +304,21 @@ class Probe:
             if self.time_limit is not None and (time.time() - start_time) >= self.time_limit:
                 break
             i += 1
-            total_time_used += current_timeout
-
+            if current_timeout < 0.5:
+                total_time_used += 0.5
+            else:
+                total_time_used += current_timeout
+            print("i",i)
+        if hasattr(self, 'max_tries'):
+            self.solving_time = self.global_timeout - total_time_used
+        print(total_time_used)
+        print("self.solving_time",self.solving_time)
+        print("remaining time:",self.global_timeout - total_time_used)
+        self.best_params, self.best_runtime, self.best_obj = Probe.solving(self)
         self.best_params = self._np_to_params(self.best_config)
         self.best_params.update(self.fix_params)
-        print(self.best_params , self.best_runtime , self.best_obj)
-        return self.best_params , self.best_runtime
+        print(self.best_params, self.best_runtime, self.best_obj)
+        return self.best_params, self.best_runtime
 
     def Grid_Search(self):
         if self.time_limit is not None:
@@ -293,7 +334,7 @@ class Probe:
 
         for params_dict in combos:
             # Make new solver
-            solver = SolverLookup.get(self.solvername, self.model)
+            solver = SolverLookup.get(self.solver_name, self.model)
             # set fixed params
             params_dict.update(self.fix_params)
             timeout = self.best_runtime
@@ -316,21 +357,19 @@ class Probe:
     def Bayesian_Optimization(self):
         current_timeout = self.best_runtime = self.round_timeout
         opt = Optimizer(dimensions=dimensions_aslist(self.all_config), base_estimator="GP", acq_func="EI")
-        solver = SolverLookup.get(self.solvername, self.model)
+        solver = SolverLookup.get(self.solver_name, self.model)
         first_non_none_objective = False
         self.best_obj = obj = 1e10 if self.mode == "minimize" else -1e10
         round_counter = total_time_used = solve_call_counter = seen_counter = 0
-        self.probe_timeout, self.none_change_flag = Probe.Tuning_global_timeout(self, self.global_timeout, self.tuning_timeout_type, self.solution_list, round_counter, self.probe_timeout, total_time_used)
         self.solution_list.append({'params': self.best_params})
         while (self.tuning_timeout_type == "Static" and total_time_used + current_timeout < self.probe_timeout and current_timeout != 0)or(self.tuning_timeout_type == "Dynamic" and round_counter<self.max_tries):
+            solver = SolverLookup.get(self.solver_name, self.model)
             params = opt.ask()
             parameters = point_asdict(self.all_config, params) if total_time_used != 0 else self.default_config
-            # print("*************", parameters)
             seen = False
             for solution in self.solution_list:
                 if solution.get('params') == parameters:
                     seen = True
-                    print("solution.get('objective')",solution.get('objective'))
                     obj = solution.get('objective')
                     runtime = solution.get('runtime')
                     status = solution.get('status')
@@ -347,12 +386,20 @@ class Probe:
                 # if seen_counter == 8:
                 #     break
             else:
-                if self.stop == "Timeout":# "First_Solution" , "Timeout"
-                    print("**parameters", parameters)
-                    # solver.solve(**parameters, time_limit=current_timeout)
-                    solver.solve(**parameters, time_limit=current_timeout)
+                if self.stop == "Timeout":
+                    if self.solver_name == "ortools":
+                        solver.solve(time_limit=current_timeout, **parameters)
+                    elif self.solver_name == "choco":
+                        parameters = {key: value for key, value in parameters.items() if value is not None}
+                        parameters = {key: int(value) for key, value in parameters.items()}
+                        solver.solve(time_limit=current_timeout, **{k: int(v) for k, v in parameters.items()})
                 elif self.stop == "First_Solution":
-                    solver.solve(**parameters)
+                    if self.solver_name == "ortools":
+                        solver.solve(**parameters)
+                    elif self.solver_name == "choco":
+                        parameters = {key: value for key, value in parameters.items() if value is not None}
+                        parameters = {key: int(value) for key, value in parameters.items()}
+                        solver.solve(**{k: int(v) for k, v in parameters.items()})
                 if solver.objective_value() is not None:
                     solve_call_counter += 1
                     self.first_non_none_objective = True
@@ -360,14 +407,18 @@ class Probe:
                     if (solver.objective_value() is not None and solver.objective_value() < self.best_obj) or (solver.objective_value() == self.best_obj and (self.best_runtime is None or solver.status().runtime < self.best_runtime)):
                         self.best_obj = solver.objective_value()
                         self.best_params = parameters
-                        self.best_runtime = solver.status().runtime
+                        self.best_runtime = round(solver.status().runtime,3)
                 else:
                     if (solver.objective_value() is not None and solver.objective_value() > self.best_obj) or (solver.objective_value() == self.best_obj and (
                             self.best_runtime is None or solver.status().runtime < self.best_runtime)):
                         self.best_obj = solver.objective_value()
                         self.best_params = parameters
-                        self.best_runtime = solver.status().runtime
-                total_time_used += current_timeout
+                        self.best_runtime = round(solver.status().runtime,3)
+                if current_timeout < 0.5 :
+                    total_time_used += 0.5
+                else:
+                    total_time_used += current_timeout
+
                 obj = solver.objective_value() if solve_call_counter > 0 else None
                 if obj is None or not np.isfinite(obj):
                     obj = self.best_obj if self.best_obj is not None and np.isfinite(self.best_obj) else 1e10
@@ -382,64 +433,114 @@ class Probe:
                     first_non_none_objective = True
                 self.solution_list.append({
                     'params': dict(parameters),
-                    # 'objective': solver.objective_value(),
                     'objective': obj,
                     'runtime': round(solver.status().runtime, 3),
                     'status': solver.status().exitstatus
                 })
                 obj = -obj if self.mode == "maximize" else obj
             if self.tuning_timeout_type == "Dynamic":
-                probe_timeout, self.none_change_flag = Probe.Tuning_global_timeout(self, self.global_timeout,
+                self.probe_timeout, self.none_change_flag = Probe.Tuning_global_timeout(self, self.global_timeout,
                                                                                    self.tuning_timeout_type,
                                                                                    self.solution_list,
                                                                                    round_counter,
-                                                                                   self.probe_timeout, total_time_used)
+                                                                                   total_time_used)
                 print("self.none_change_flag", self.none_change_flag)
                 if self.none_change_flag:
                     break
+            print("obj", solver.objective_value())
+            print("runtime", round(solver.status().runtime,3))
             if self.tuning_timeout_type == "Static" and total_time_used >= self.probe_timeout:
                 print("Timeout reached. Exiting.")
                 break
+            print("total_time_used",total_time_used)
             opt.tell(params, obj)
             round_counter += 1
         solve_call_counter += 1
-        best_params = point_asdict(self.all_config, opt.Xi[np.argmin(opt.yi)])
-        best_params.update(best_params)
-        solver.solve(**self.best_params, time_limit=self.solving_time)
-        print(solver.objective_value())
-        print(self.best_params)
-        print(solver.status().runtime)
+        # best_params = point_asdict(self.all_config, opt.Xi[np.argmin(opt.yi)])
+        # best_params.update(best_params)
+        # if self.best_params is None:
+        #     self.best_params = self.default_config
+        # if self.solver_name == "ortools":
+        #     solver.solve(**self.best_params, time_limit=self.solving_time)
+        # elif self.solver_name == "choco":
+        #     self.best_params = {key: value for key, value in self.best_params.items() if value is not None}
+        #     self.best_params = {key: int(value) for key, value in self.best_params.items()}
+        #     solver.solve(time_limit=self.solving_time, **{k: int(v) for k, v in self.best_params.items()})
+        # if self.mode == "minimize":
+        #     if (solver.objective_value() is not None and solver.objective_value() < self.best_obj) or (
+        #             solver.objective_value() == self.best_obj and (
+        #             self.best_runtime is None or solver.status().runtime < self.best_runtime)):
+        #         self.best_obj = solver.objective_value()
+        #         self.best_runtime = round(solver.status().runtime, 3)
+        # else:
+        #     if (solver.objective_value() is not None and solver.objective_value() > self.best_obj) or (
+        #             solver.objective_value() == self.best_obj and (
+        #             self.best_runtime is None or solver.status().runtime < self.best_runtime)):
+        #         self.best_obj = solver.objective_value()
+        #         self.best_runtime = round(solver.status().runtime, 3)
+        self.best_params , self.best_runtime , self.best_obj = Probe.solving(self)
         print(self.best_params , self.best_runtime , self.best_obj)
+        return self.best_params, self.best_runtime
+
+    def free_search(self):
+        solver = SolverLookup.get(self.solver_name, self.model)
+        solver.solve(time_limit=self.global_timeout)
+        self.best_obj = solver.objective_value()
+        self.best_runtime = solver.status().runtime
+        print(self.best_params, self.best_runtime, self.best_obj)
         return self.best_params, self.best_runtime
 
     def get_best_params_and_runtime(self):
         return self.best_params, self.best_runtime
 
-
     def save_result(self):
+        self.results_file = f"hpo_result_{self.solver_name}.csv"
+
         if os.path.exists(self.results_file):
             df = pd.read_csv(self.results_file)
         else:
-            df = pd.DataFrame(columns=[
-                "problem", "Global_timeout", "Mode",
-                "objective_Hamming", "run_time_Hamming", "best_configuration_Hamming",
-                "objective_BO", "run_time_BO", "best_configuration_BO",
-                "objective_Grid", "run_time_Grid", "best_configuration_Grid",
-                "Best_HPO_Method"
-            ])
+            if self.solver_name == "choco":
+                df = pd.DataFrame(columns=[
+                    "problem", "Global_timeout", "Mode",
+                    "objective_Hamming", "run_time_Hamming", "best_configuration_Hamming",
+                    "objective_BO", "run_time_BO", "best_configuration_BO",
+                    "objective_Grid", "run_time_Grid", "best_configuration_Grid",
+                    "objective_free", "run_time_free", "best_configuration_free",
+                    "Best_HPO_Method"
+                ])
+            else:
+                df = pd.DataFrame(columns=[
+                    "problem", "Global_timeout", "Mode",
+                    "objective_Hamming", "run_time_Hamming", "best_configuration_Hamming",
+                    "objective_BO", "run_time_BO", "best_configuration_BO",
+                    "objective_Grid", "run_time_Grid", "best_configuration_Grid",
+                    "Best_HPO_Method"
+                ])
 
         if self.problem_name in df["problem"].values:
             row_index = df[df["problem"] == self.problem_name].index[0]
         else:
-            new_row = {
-                "problem": self.problem_name,
-                "Global_timeout": self.global_timeout,
-                "Mode": self.mode,
-                "objective_Hamming": None, "run_time_Hamming": None, "best_configuration_Hamming": None,
-                "objective_BO": None, "run_time_BO": None, "best_configuration_BO": None,
-                "objective_Grid": None, "run_time_Grid": None, "best_configuration_Grid": None,
-                "Best_HPO_Method": None
-            }
+            if self.solver_name == "choco":
+                new_row = {
+                    "problem": self.problem_name,
+                    "Global_timeout": self.global_timeout,
+                    "Mode": self.mode,
+                    "objective_Hamming": None, "run_time_Hamming": None, "best_configuration_Hamming": None,
+                    "objective_BO": None, "run_time_BO": None, "best_configuration_BO": None,
+                    "objective_Grid": None, "run_time_Grid": None, "best_configuration_Grid": None,
+                    "objective_free": None, "run_time_free": None, "best_configuration_free": None,
+                    "Best_HPO_Method": None
+                }
+            else:
+                new_row = {
+                    "problem": self.problem_name,
+                    "Global_timeout": self.global_timeout,
+                    "Mode": self.mode,
+                    "objective_Hamming": None, "run_time_Hamming": None, "best_configuration_Hamming": None,
+                    "objective_BO": None, "run_time_BO": None, "best_configuration_BO": None,
+                    "objective_Grid": None, "run_time_Grid": None, "best_configuration_Grid": None,
+                    "Best_HPO_Method": None
+                }
             df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
             row_index = df.index[-1]
 
@@ -459,6 +560,11 @@ class Probe:
             df.at[row_index, "run_time_Grid"] = str(self.best_runtime)
             df.at[row_index, "best_configuration_Grid"] = str(self.best_params)
 
+        elif self.solver_name == "choco" and self.HPO == "freesearch":
+            df.at[row_index, "objective_free"] = self.best_obj
+            df.at[row_index, "run_time_free"] = str(self.best_runtime)
+            df.at[row_index, "best_configuration_free"] = str(self.best_params)
+
         # Compare methods and update best one
         self.compare_hpo_methods(df)
 
@@ -469,27 +575,49 @@ class Probe:
         for i, row in df.iterrows():
             mode = str(row["Mode"]).strip().lower()
 
-            if mode == "maximize":
-                hamming_obj = row["objective_Hamming"] if pd.notna(row["objective_Hamming"]) else -1e10
-                bo_obj = row["objective_BO"] if pd.notna(row["objective_BO"]) else -1e10
-                grid_obj = row["objective_Grid"] if pd.notna(row["objective_Grid"]) else -1e10
-            elif mode == "minimize":
-                hamming_obj = row["objective_Hamming"] if pd.notna(row["objective_Hamming"]) else 1e10
-                bo_obj = row["objective_BO"] if pd.notna(row["objective_BO"]) else 1e10
-                grid_obj = row["objective_Grid"] if pd.notna(row["objective_Grid"]) else 1e10
+            if self.solver_name == "choco":
+                if mode == "maximize":
+                    hamming_obj = row["objective_Hamming"] if pd.notna(row["objective_Hamming"]) else -1e10
+                    bo_obj = row["objective_BO"] if pd.notna(row["objective_BO"]) else -1e10
+                    grid_obj = row["objective_Grid"] if pd.notna(row["objective_Grid"]) else -1e10
+                    free_obj = row["objective_free"] if pd.notna(row["objective_free"]) else -1e10
+                elif mode == "minimize":
+                    hamming_obj = row["objective_Hamming"] if pd.notna(row["objective_Hamming"]) else 1e10
+                    bo_obj = row["objective_BO"] if pd.notna(row["objective_BO"]) else 1e10
+                    grid_obj = row["objective_Grid"] if pd.notna(row["objective_Grid"]) else 1e10
+                    free_obj = row["objective_free"] if pd.notna(row["objective_free"]) else 1e10
+                else:
+                    raise ValueError(f"Unknown mode: {mode}")
             else:
-                raise ValueError(f"Unknown mode: {mode}")
+                if mode == "maximize":
+                    hamming_obj = row["objective_Hamming"] if pd.notna(row["objective_Hamming"]) else -1e10
+                    bo_obj = row["objective_BO"] if pd.notna(row["objective_BO"]) else -1e10
+                    grid_obj = row["objective_Grid"] if pd.notna(row["objective_Grid"]) else -1e10
+                elif mode == "minimize":
+                    hamming_obj = row["objective_Hamming"] if pd.notna(row["objective_Hamming"]) else 1e10
+                    bo_obj = row["objective_BO"] if pd.notna(row["objective_BO"]) else 1e10
+                    grid_obj = row["objective_Grid"] if pd.notna(row["objective_Grid"]) else 1e10
+                else:
+                    raise ValueError(f"Unknown mode: {mode}")
 
-            print(f"Row {i} - Hamming: {hamming_obj}, BO: {bo_obj}, Grid: {grid_obj}")
+            if self.solver_name == "choco":
+                print(f"Row {i} - Hamming: {hamming_obj}, BO: {bo_obj}, Grid: {grid_obj}, free: {free_obj}")
+            else:
+                print(f"Row {i} - Hamming: {hamming_obj}, BO: {bo_obj}, Grid: {grid_obj}")
             print(f"Mode: {mode}")
 
             # Convert runtime values to float (set inf if missing)
             hamming_time = float(row["run_time_Hamming"]) if pd.notna(row["run_time_Hamming"]) else float("inf")
             bo_time = float(row["run_time_BO"]) if pd.notna(row["run_time_BO"]) else float("inf")
             grid_time = float(row["run_time_Grid"]) if pd.notna(row["run_time_Grid"]) else float("inf")
+            if self.solver_name == "choco":
+                free_time = float(row["run_time_free"]) if pd.notna(row["run_time_free"]) else float("inf")
 
             # Determine best HPO method
-            best_obj = max(hamming_obj, bo_obj, grid_obj) if mode == "maximize" else min(hamming_obj, bo_obj, grid_obj)
+            if self.solver_name == "choco":
+                best_obj = max(hamming_obj, bo_obj, grid_obj, free_obj) if mode == "maximize" else min(hamming_obj, bo_obj, grid_obj, free_obj)
+            else:
+                best_obj = max(hamming_obj, bo_obj, grid_obj) if mode == "maximize" else min(hamming_obj, bo_obj, grid_obj)
             print(f"Best objective found: {best_obj}")
 
             # Select the best method (if there's a tie, pick the one with the shortest runtime)
@@ -500,6 +628,9 @@ class Probe:
                 best_methods.append(("Bayesian", bo_time))
             if abs(grid_obj - best_obj) < 1e-6:
                 best_methods.append(("Grid", grid_time))
+            if self.solver_name == "choco":
+                if abs(free_obj - best_obj) < 1e-6:
+                    best_methods.append(("free", free_time))
 
             print(f"Candidate best methods before sorting: {best_methods}")
             best_methods.sort(key=lambda x: x[1])  # Sort by runtime (ascending)
@@ -508,21 +639,7 @@ class Probe:
 
         df.to_csv(self.results_file, index=False)
 
-
-    def config(self):
-        if self.solvername == "choco":
-            tunables = {
-                "-a": [False, True],
-                "-f": [False, True],
-                "-last": [False, True]
-            }
-
-            defaults = {
-                "-a": False,
-                "-f": False,
-                "-last": False
-            }
-
+    def config_(self):
         default_params = {
             "init_round_type": "Static",
             "stop_type": "Timeout",
@@ -536,3 +653,32 @@ class Probe:
             "time_evol": "Static"  # "Static", "Dynamic_Geometric" , "Dynamic_Luby"
         }
         params = {**default_params, **user_params}
+
+    def solving(self):
+        if self.best_params is None:
+            self.best_params = self.default_config
+        solver = SolverLookup.get(self.solver_name, self.model)
+        if self.solver_name == "ortools":
+            print("IM runnig solving phase")
+            solver.solve(**self.best_params, time_limit=self.solving_time)
+        elif self.solver_name == "choco":
+            self.best_params = {key: value for key, value in self.best_params.items() if value is not None}
+            self.best_params = {key: int(value) for key, value in self.best_params.items()}
+            solver.solve(time_limit=self.solving_time, **{k: int(v) for k, v in self.best_params.items()})
+
+        if self.mode == "minimize":
+            if (solver.objective_value() is not None and solver.objective_value() < self.best_obj) or (
+                    solver.objective_value() == self.best_obj and (
+                    self.best_runtime is None or solver.status().runtime < self.best_runtime)):
+                self.best_obj = solver.objective_value()
+                self.best_runtime = round(solver.status().runtime, 3)
+        else:
+            if (solver.objective_value() is not None and solver.objective_value() > self.best_obj) or (
+                    solver.objective_value() == self.best_obj and (
+                    self.best_runtime is None or solver.status().runtime < self.best_runtime)):
+                self.best_obj = solver.objective_value()
+                self.best_runtime = round(solver.status().runtime, 3)
+
+        return self.best_params, self.best_runtime, self.best_obj
+
+

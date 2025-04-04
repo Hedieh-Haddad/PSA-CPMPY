@@ -22,9 +22,9 @@ from cpmpy.tools import ParameterTuner
 
 
 # Data
-v, b = 11, 11
-r, k = 5, 5
-l = 2
+v, b = 7, 7
+r, k = 3, 3
+l = 1
 
 # Variables, incidence matrix
 block = boolvar(shape=(v,b), name="block")
@@ -52,17 +52,11 @@ else:
 
 m.minimize(b)
 
-tunables = {
-    "search_branching": [0, 1, 2, 3, 4, 5, 6, 7],
-    "linearization_level": [0, 1],
-    'symmetry_level': [0, 1, 2]}
+tunables = {}
 
-defaults = {
-    "search_branching": 7,
-    "linearization_level": 0,
-    'symmetry_level': 1}
+defaults = {}
 
-solver = "ortools"
+solver = ""
 tuner = ParameterTuner(solver, m, tunables, defaults)
 
 default_params = {
@@ -80,7 +74,7 @@ user_params = {
 params = {**default_params, **user_params}
 
 best_params = tuner.tune(
-    time_limit=120,
+    time_limit=100,
     max_tries=10,
     **params
 )
