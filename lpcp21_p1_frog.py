@@ -9,6 +9,8 @@ import numpy as np
 from cpmpy import *
 from cpmpy.tools import ParameterTuner
 import time
+from cpmpy import Model, variables
+
 
 # Nice example of planning-as-sat (for fixed step length),
 # 3D tensors, numpy indexing, and vectorized constraints

@@ -79,7 +79,7 @@ class SolverLookup():
                 ("pysdd", CPM_pysdd),
                 ("exact", CPM_exact),
                 ("choco", CPM_choco),
-                ("ace", CPM_ace),
+                ("ACE", CPM_ace),
                ]
 
     @classmethod

@@ -74,17 +74,18 @@ class Probe:
         self.time_evol = kwargs.get('time_evol', None)
         self.results_file = f"hpo_result_{self.solver_name}.csv"
         #######################
-        if self.solver_name == "ace":
-            print("self.relative_path", self.relative_path)
-            cmd = ["python3", self.relative_path, ]
-        # if self.data:
-        #     cmd.append(f"-data=modelsXCSP22/COP/{self.model}/{self.data}")
-        # if self.dataparser:
-        #     cmd.append(f"-dataparser=modelsXCSP22/COP/{self.model}/{self.dataparser}.py")
-        # start_time = time.time()
-        # try:
-            output = subprocess.run(cmd, universal_newlines=True, text=True, capture_output=True)
-            print(output)
+        if self.solver_name == "ACE":
+            print("ACE")
+        #     print("self.relative_path", self.relative_path)
+        #     cmd = ["python3", self.relative_path, ]
+        # # if self.data:
+        # #     cmd.append(f"-data=modelsXCSP22/COP/{self.model}/{self.data}")
+        # # if self.dataparser:
+        # #     cmd.append(f"-dataparser=modelsXCSP22/COP/{self.model}/{self.dataparser}.py")
+        # # start_time = time.time()
+        # # try:
+        #     output = subprocess.run(cmd, universal_newlines=True, text=True, capture_output=True)
+        #     print(output)
         #######################
         if self.tuning_timeout_type == "Static":
             self.probe_timeout, self.none_change_flag = Probe.Tuning_global_timeout(self, self.global_timeout, self.tuning_timeout_type, self.solution_list, round_counter, total_time_used)
@@ -106,31 +107,31 @@ class Probe:
     def set_hp(self, solver_name):
         if solver_name == "ortools":
             tunables = {
-                'optimize_with_core': [False, True],
-                'search_branching': [0, 1, 2, 3, 4, 5, 6],
-                'boolean_encoding_level': [0, 1, 2, 3],
+                # 'optimize_with_core': [False, True],
+                # 'search_branching': [0, 1, 2, 3, 4, 5, 6],
+                # 'boolean_encoding_level': [0, 1, 2, 3],
                 'linearization_level': [0, 1, 2],
                 'core_minimization_level': [0, 1, 2],  # new in OR-tools>= v9.8
                 'cp_model_probing_level': [0, 1, 2, 3],
-                'cp_model_presolve': [False, True],
-                'clause_cleanup_ordering': [0, 1],
-                'binary_minimization_algorithm': [0, 1, 2, 3, 4],
-                'minimization_algorithm': [0, 1, 2, 3],
-                'use_phase_saving': [False, True]
+                # 'cp_model_presolve': [False, True],
+                # 'clause_cleanup_ordering': [0, 1],
+                # 'binary_minimization_algorithm': [0, 1, 2, 3, 4],
+                # 'minimization_algorithm': [0, 1, 2, 3],
+                # 'use_phase_saving': [False, True]
                 }
 
             defaults = {
-                'optimize_with_core': False,
-                'search_branching': 0,
-                'boolean_encoding_level': 1,
+                # 'optimize_with_core': False,
+                # 'search_branching': 0,
+                # 'boolean_encoding_level': 1,
                 'linearization_level': 1,
                 'core_minimization_level': 2,# new in OR-tools>=v9.8
                 'cp_model_probing_level': 2,
-                'cp_model_presolve': True,
-                'clause_cleanup_ordering': 0,
-                'binary_minimization_algorithm': 1,
-                'minimization_algorithm': 2,
-                'use_phase_saving': True
+                # 'cp_model_presolve': True,
+                # 'clause_cleanup_ordering': 0,
+                # 'binary_minimization_algorithm': 1,
+                # 'minimization_algorithm': 2,
+                # 'use_phase_saving': True
                 }
         elif solver_name == "choco":
             tunables = {
@@ -155,22 +156,15 @@ class Probe:
             defaults = {key: defaults[key] for key in defaults}
             tunables = {key: tunables[key] for key in tunables}
 
-        elif solver_name == "ace":
+        elif solver_name == "ACE":
             tunables = {
-                "solution_limit": [None, 0, 100, 500, 1000],
-                "node_limit": [None, 1000, 5000, 10000],
-                "fail_limit": [None, 100, 500, 1000],
-                "restart_limit": [None],
-                "backtrack_limit": [None]
+                "varh": ["input", "dom", "rand"],
+                "valh": ["min", "max", "rand"],
             }
             defaults = {
-                "solution_limit": None,
-                "node_limit": None,
-                "fail_limit": None,
-                "restart_limit": None,
-                "backtrack_limit": None
+                "varh": ["input"],
+                "valh": ["min"],
             }
-
         return tunables, defaults
 
     def initialize_round_timeout(self, solver_name, model, round_type):
@@ -251,6 +245,7 @@ class Probe:
         if self.time_limit is not None:
             start_time = time.time()
         combos = list(param_combinations(self.all_config))
+        print("combos",combos)
         combos_np = self._params_to_np(combos)
         self.best_runtime = self.round_timeout
         # Ensure random start
@@ -268,14 +263,19 @@ class Probe:
             # Make new solver total_time_used += current_timeout
             solver = SolverLookup.get(self.solver_name, self.model)
             # Apply scoring to all combos
+            print("combos_np", combos_np)
             scores = self._get_score(combos_np)
+            print("scores",scores)
             max_idx = np.where(scores == scores.min())[0][0]
+            print("max_idx",max_idx)
             # Get index of optimal combo
             params_np = combos_np[max_idx]
             # Remove optimal combo from combos
             combos_np = np.delete(combos_np, max_idx, axis=0)
             # Convert numpy array back to dictionary
+            print("AFTER : : :combos_np", combos_np)
             params_dict = self._np_to_params(params_np)
+            print("params_dict",params_dict)
             # set fixed params
             params_dict.update(self.fix_params)
             timeout = self.best_runtime
@@ -357,7 +357,6 @@ class Probe:
     def Bayesian_Optimization(self):
         current_timeout = self.best_runtime = self.round_timeout
         opt = Optimizer(dimensions=dimensions_aslist(self.all_config), base_estimator="GP", acq_func="EI")
-        solver = SolverLookup.get(self.solver_name, self.model)
         first_non_none_objective = False
         self.best_obj = obj = 1e10 if self.mode == "minimize" else -1e10
         round_counter = total_time_used = solve_call_counter = seen_counter = 0
@@ -365,7 +364,9 @@ class Probe:
         while (self.tuning_timeout_type == "Static" and total_time_used + current_timeout < self.probe_timeout and current_timeout != 0)or(self.tuning_timeout_type == "Dynamic" and round_counter<self.max_tries):
             solver = SolverLookup.get(self.solver_name, self.model)
             params = opt.ask()
+            print(f"=== opt.ask() gave: {params}")
             parameters = point_asdict(self.all_config, params) if total_time_used != 0 else self.default_config
+            print(f"Converted to parameter dict: {parameters}")
             seen = False
             for solution in self.solution_list:
                 if solution.get('params') == parameters:
@@ -448,7 +449,7 @@ class Probe:
                 if self.none_change_flag:
                     break
             print("obj", solver.objective_value())
-            print("runtime", round(solver.status().runtime,3))
+            print("runtime", solver.status().runtime)
             if self.tuning_timeout_type == "Static" and total_time_used >= self.probe_timeout:
                 print("Timeout reached. Exiting.")
                 break
@@ -456,28 +457,6 @@ class Probe:
             opt.tell(params, obj)
             round_counter += 1
         solve_call_counter += 1
-        # best_params = point_asdict(self.all_config, opt.Xi[np.argmin(opt.yi)])
-        # best_params.update(best_params)
-        # if self.best_params is None:
-        #     self.best_params = self.default_config
-        # if self.solver_name == "ortools":
-        #     solver.solve(**self.best_params, time_limit=self.solving_time)
-        # elif self.solver_name == "choco":
-        #     self.best_params = {key: value for key, value in self.best_params.items() if value is not None}
-        #     self.best_params = {key: int(value) for key, value in self.best_params.items()}
-        #     solver.solve(time_limit=self.solving_time, **{k: int(v) for k, v in self.best_params.items()})
-        # if self.mode == "minimize":
-        #     if (solver.objective_value() is not None and solver.objective_value() < self.best_obj) or (
-        #             solver.objective_value() == self.best_obj and (
-        #             self.best_runtime is None or solver.status().runtime < self.best_runtime)):
-        #         self.best_obj = solver.objective_value()
-        #         self.best_runtime = round(solver.status().runtime, 3)
-        # else:
-        #     if (solver.objective_value() is not None and solver.objective_value() > self.best_obj) or (
-        #             solver.objective_value() == self.best_obj and (
-        #             self.best_runtime is None or solver.status().runtime < self.best_runtime)):
-        #         self.best_obj = solver.objective_value()
-        #         self.best_runtime = round(solver.status().runtime, 3)
         self.best_params , self.best_runtime , self.best_obj = Probe.solving(self)
         print(self.best_params , self.best_runtime , self.best_obj)
         return self.best_params, self.best_runtime

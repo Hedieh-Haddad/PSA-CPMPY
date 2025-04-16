@@ -32,6 +32,7 @@ EXCLUDE_GLOBAL = {"pysat": NUM_GLOBAL,
                   "pysdd": NUM_GLOBAL | {"Xor"},
                   "z3": {"Inverse"},
                   "choco": {"Inverse"},
+                  "ACE": {"Inverse"},
                   "ortools":{"Inverse"},
                   "exact": {"Inverse"},
                   "minizinc": {"IncreasingStrict"}, # bug #813 reported on libminizinc

@@ -1,0 +1,12 @@
+<instance format="XCSP3" type="CSP">
+  <variables>
+    <array id="x" size="[3]"> 0 1 </array>
+  </variables>
+  <constraints>
+    <or>
+      <intension> eq(x[0],1) </intension>
+      <intension> eq(x[1],1) </intension>
+      <intension> eq(x[2],1) </intension>
+    </or>
+  </constraints>
+</instance>
