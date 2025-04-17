@@ -1,0 +1,3 @@
+problem,Global_timeout,Mode,objective_Hamming,run_time_Hamming,best_configuration_Hamming,objective_BO,run_time_BO,best_configuration_BO,objective_Grid,run_time_Grid,best_configuration_Grid,Best_HPO_Method
+lpcp21_p1_frog,120,minimize,25.0,0.5529749393463135,None,25.0,0.56,"OrderedDict([('valh', 'rand'), ('varh', 'rand')])",,,,Hamming
+bibd,100,minimize,7.0,0.5639219284057617,,7.0,0.551,"OrderedDict([('valh', 'rand'), ('varh', 'rand')])",,,,Bayesian

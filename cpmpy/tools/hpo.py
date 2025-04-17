@@ -73,26 +73,10 @@ class Probe:
         self.tuning_timeout_type = kwargs.get('tuning_timeout_type', None)
         self.time_evol = kwargs.get('time_evol', None)
         self.results_file = f"hpo_result_{self.solver_name}.csv"
-        #######################
-        if self.solver_name == "ACE":
-            print("ACE")
-        #     print("self.relative_path", self.relative_path)
-        #     cmd = ["python3", self.relative_path, ]
-        # # if self.data:
-        # #     cmd.append(f"-data=modelsXCSP22/COP/{self.model}/{self.data}")
-        # # if self.dataparser:
-        # #     cmd.append(f"-dataparser=modelsXCSP22/COP/{self.model}/{self.dataparser}.py")
-        # # start_time = time.time()
-        # # try:
-        #     output = subprocess.run(cmd, universal_newlines=True, text=True, capture_output=True)
-        #     print(output)
-        #######################
         if self.tuning_timeout_type == "Static":
             self.probe_timeout, self.none_change_flag = Probe.Tuning_global_timeout(self, self.global_timeout, self.tuning_timeout_type, self.solution_list, round_counter, total_time_used)
-        print("self.probe_timeout",self.probe_timeout)
         if self.HPO != "freesearch":
             self.round_timeout = Probe.initialize_round_timeout(self, self.solver_name, self.model, self.init_round_type)
-        print("self.probe_timeout", self.probe_timeout)
         self.stop = Probe.stop_condition(self, self.stop_type)
         if self.HPO == "Hamming":
             Probe.Hamming_Distance(self)
@@ -155,15 +139,14 @@ class Probe:
 
             defaults = {key: defaults[key] for key in defaults}
             tunables = {key: tunables[key] for key in tunables}
-
         elif solver_name == "ACE":
             tunables = {
-                "varh": ["input", "dom", "rand"],
-                "valh": ["min", "max", "rand"],
+                'varh': ['input', 'dom', 'rand'],
+                'valh': ['min', 'max', 'rand'],
             }
             defaults = {
-                "varh": ["input"],
-                "valh": ["min"],
+                'varh': 'input',
+                'valh': 'min',
             }
         return tunables, defaults
 
@@ -206,7 +189,6 @@ class Probe:
             self.probe_timeout = global_timeout * 0.2
             self.solving_time = global_timeout - self.probe_timeout
         elif tuning_timeout_type == "Dynamic":
-            print("self.unchanged_count", self.unchanged_count)
             if round_counter < self.max_tries and total_time_used < self.probe_timeout:
                 if len(self.solution_list) > 1:
                     if self.solution_list[-1].get('objective') == self.solution_list[-2].get('objective'):
@@ -245,37 +227,30 @@ class Probe:
         if self.time_limit is not None:
             start_time = time.time()
         combos = list(param_combinations(self.all_config))
-        print("combos",combos)
         combos_np = self._params_to_np(combos)
         self.best_runtime = self.round_timeout
         # Ensure random start
         np.random.shuffle(combos_np)
         total_time_used = current_timeout = 0
         i = 0
-        print("self.max_tries",self.max_tries)
         if self.max_tries is None:
             self.max_tries = len(combos_np)
-                # while len(combos_np) and i < self.max_tries and total_time_used < self.global_timeout:
-        print("self.global_timeout",self.global_timeout)
-        print("self.probe_timeout",self.probe_timeout)
         while (i < self.max_tries if hasattr(self,
                                              'max_tries') else True) and total_time_used + current_timeout < self.probe_timeout:
             # Make new solver total_time_used += current_timeout
             solver = SolverLookup.get(self.solver_name, self.model)
             # Apply scoring to all combos
-            print("combos_np", combos_np)
             scores = self._get_score(combos_np)
-            print("scores",scores)
+            if scores.size == 0:
+                print("Warning: scores array is empty.")
+                return
             max_idx = np.where(scores == scores.min())[0][0]
-            print("max_idx",max_idx)
             # Get index of optimal combo
             params_np = combos_np[max_idx]
             # Remove optimal combo from combos
             combos_np = np.delete(combos_np, max_idx, axis=0)
             # Convert numpy array back to dictionary
-            print("AFTER : : :combos_np", combos_np)
             params_dict = self._np_to_params(params_np)
-            print("params_dict",params_dict)
             # set fixed params
             params_dict.update(self.fix_params)
             timeout = self.best_runtime
@@ -289,8 +264,12 @@ class Probe:
                 if timeout < 0.5 :
                     timeout = 0.5
                 best_params = {key: value for key, value in params_dict.items() if value is not None}
+                print("best_params_first_step:",best_params)
                 best_params = {key: int(value) for key, value in best_params.items()}
+                print("best_params_second_step:",best_params)
                 solver.solve(time_limit=timeout, **{k: int(v) for k, v in best_params.items()})
+            elif self.solver_name == "ACE":
+                solver.solve(**params_dict, time_limit=timeout)
             if solver.status().exitstatus == ExitStatus.OPTIMAL and solver.status().runtime < self.best_runtime:
                 self.best_runtime = solver.status().runtime
                 # update surrogate
@@ -308,10 +287,9 @@ class Probe:
                 total_time_used += 0.5
             else:
                 total_time_used += current_timeout
-            print("i",i)
         if hasattr(self, 'max_tries'):
             self.solving_time = self.global_timeout - total_time_used
-        print(total_time_used)
+        print("total_time_used",total_time_used)
         print("self.solving_time",self.solving_time)
         print("remaining time:",self.global_timeout - total_time_used)
         self.best_params, self.best_runtime, self.best_obj = Probe.solving(self)
@@ -350,8 +328,7 @@ class Probe:
 
             if self.time_limit is not None and (time.time() - start_time) >= self.time_limit:
                 break
-
-        # print(self.best_params , self.best_runtime)
+        print(self.best_params , self.best_runtime)
         return self.best_params , self.best_runtime
 
     def Bayesian_Optimization(self):
@@ -364,9 +341,7 @@ class Probe:
         while (self.tuning_timeout_type == "Static" and total_time_used + current_timeout < self.probe_timeout and current_timeout != 0)or(self.tuning_timeout_type == "Dynamic" and round_counter<self.max_tries):
             solver = SolverLookup.get(self.solver_name, self.model)
             params = opt.ask()
-            print(f"=== opt.ask() gave: {params}")
             parameters = point_asdict(self.all_config, params) if total_time_used != 0 else self.default_config
-            print(f"Converted to parameter dict: {parameters}")
             seen = False
             for solution in self.solution_list:
                 if solution.get('params') == parameters:
@@ -394,6 +369,8 @@ class Probe:
                         parameters = {key: value for key, value in parameters.items() if value is not None}
                         parameters = {key: int(value) for key, value in parameters.items()}
                         solver.solve(time_limit=current_timeout, **{k: int(v) for k, v in parameters.items()})
+                    elif self.solver_name == "ACE":
+                        solver.solve(time_limit=current_timeout, **parameters)
                 elif self.stop == "First_Solution":
                     if self.solver_name == "ortools":
                         solver.solve(**parameters)
@@ -401,6 +378,8 @@ class Probe:
                         parameters = {key: value for key, value in parameters.items() if value is not None}
                         parameters = {key: int(value) for key, value in parameters.items()}
                         solver.solve(**{k: int(v) for k, v in parameters.items()})
+                    elif self.solver_name == "ACE":
+                        solver.solve(**parameters)
                 if solver.objective_value() is not None:
                     solve_call_counter += 1
                     self.first_non_none_objective = True
@@ -435,7 +414,7 @@ class Probe:
                 self.solution_list.append({
                     'params': dict(parameters),
                     'objective': obj,
-                    'runtime': round(solver.status().runtime, 3),
+                    'runtime': solver.status().runtime,
                     'status': solver.status().exitstatus
                 })
                 obj = -obj if self.mode == "maximize" else obj
@@ -445,7 +424,6 @@ class Probe:
                                                                                    self.solution_list,
                                                                                    round_counter,
                                                                                    total_time_used)
-                print("self.none_change_flag", self.none_change_flag)
                 if self.none_change_flag:
                     break
             print("obj", solver.objective_value())
@@ -644,7 +622,8 @@ class Probe:
             self.best_params = {key: value for key, value in self.best_params.items() if value is not None}
             self.best_params = {key: int(value) for key, value in self.best_params.items()}
             solver.solve(time_limit=self.solving_time, **{k: int(v) for k, v in self.best_params.items()})
-
+        elif self.solver_name == "ACE":
+            solver.solve(**self.best_params, time_limit=self.solving_time)
         if self.mode == "minimize":
             if (solver.objective_value() is not None and solver.objective_value() < self.best_obj) or (
                     solver.objective_value() == self.best_obj and (

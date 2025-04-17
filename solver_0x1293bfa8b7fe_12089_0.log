@@ -1,0 +1,44 @@
+
+[93mACE v2.1 [0m
+
+  [94minstance[0m
+    name:bibd
+
+  Loading variables...
+
+  Loading constraints...
+
+  [94mdomains[0m
+    types:5  values:758  sizes:[2:379]
+  [94mvariables[0m
+    count:379  arrays:0  degrees:[1:35,2:295,8:49]
+  [94mconstraints[0m
+    count:331  specific:331  arities:[1:2,2:147,3:147,8:35]
+    distribution:[Mul3bEQ:147,ObjVarGEu:1,ObjVarLEu:1,Sub2EQ:147,SumWeightedEQ:35]
+    wck:0.15  cpu:0.452  mem:22M394
+  [94mobjective[0m
+    way:min  type:ObjVarLE  bounds:7..7
+
+  Building solver... 
+
+  [94msolver[0m
+    guaranteedAC:true
+    wck:0.17  cpu:0.465  mem:24M940
+
+  [94mpreprocessing[0m
+    effs:14  values:737  unsat:true
+    wck:0.001  cpu:0.466  mem:24M940
+
+
+  [94mglobal[0m
+    effs:14
+    stop:FULL_EXPLORATION
+    wck:0.17  cpu:0.466  mem:24M940
+
+[92ms UNSATISFIABLE[0m
+[92m
+d WRONG DECISIONS[0m 0
+[92md FOUND SOLUTIONS[0m 0
+[92md COMPLETE EXPLORATION[0m
+
+c real time : 0.467

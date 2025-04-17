@@ -23,13 +23,11 @@
 import warnings
 import time
 from enum import Enum
-
 from ..exceptions import NotSupportedError
 from ..expressions.core import Expression
 from ..transformations.get_variables import get_variables
 from ..expressions.utils import is_num, is_any_list
 from ..expressions.python_builtins import any,all
-
 
 class SolverInterface(object):
     """

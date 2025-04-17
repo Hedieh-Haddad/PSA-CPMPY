@@ -1,0 +1,822 @@
+<instance format="XCSP3" type="COP">
+  <variables>
+    <var id="block_0_0"> 0 1 </var>
+    <var id="block_0_1"> 0 1 </var>
+    <var id="block_0_2"> 0 1 </var>
+    <var id="block_0_3"> 0 1 </var>
+    <var id="block_0_4"> 0 1 </var>
+    <var id="block_0_5"> 0 1 </var>
+    <var id="block_0_6"> 0 1 </var>
+    <var id="const_3_8"> 3 3 </var>
+    <var id="block_1_0"> 0 1 </var>
+    <var id="block_1_1"> 0 1 </var>
+    <var id="block_1_2"> 0 1 </var>
+    <var id="block_1_3"> 0 1 </var>
+    <var id="block_1_4"> 0 1 </var>
+    <var id="block_1_5"> 0 1 </var>
+    <var id="block_1_6"> 0 1 </var>
+    <var id="const_3_16"> 3 3 </var>
+    <var id="block_2_0"> 0 1 </var>
+    <var id="block_2_1"> 0 1 </var>
+    <var id="block_2_2"> 0 1 </var>
+    <var id="block_2_3"> 0 1 </var>
+    <var id="block_2_4"> 0 1 </var>
+    <var id="block_2_5"> 0 1 </var>
+    <var id="block_2_6"> 0 1 </var>
+    <var id="const_3_24"> 3 3 </var>
+    <var id="block_3_0"> 0 1 </var>
+    <var id="block_3_1"> 0 1 </var>
+    <var id="block_3_2"> 0 1 </var>
+    <var id="block_3_3"> 0 1 </var>
+    <var id="block_3_4"> 0 1 </var>
+    <var id="block_3_5"> 0 1 </var>
+    <var id="block_3_6"> 0 1 </var>
+    <var id="const_3_32"> 3 3 </var>
+    <var id="block_4_0"> 0 1 </var>
+    <var id="block_4_1"> 0 1 </var>
+    <var id="block_4_2"> 0 1 </var>
+    <var id="block_4_3"> 0 1 </var>
+    <var id="block_4_4"> 0 1 </var>
+    <var id="block_4_5"> 0 1 </var>
+    <var id="block_4_6"> 0 1 </var>
+    <var id="const_3_40"> 3 3 </var>
+    <var id="block_5_0"> 0 1 </var>
+    <var id="block_5_1"> 0 1 </var>
+    <var id="block_5_2"> 0 1 </var>
+    <var id="block_5_3"> 0 1 </var>
+    <var id="block_5_4"> 0 1 </var>
+    <var id="block_5_5"> 0 1 </var>
+    <var id="block_5_6"> 0 1 </var>
+    <var id="const_3_48"> 3 3 </var>
+    <var id="block_6_0"> 0 1 </var>
+    <var id="block_6_1"> 0 1 </var>
+    <var id="block_6_2"> 0 1 </var>
+    <var id="block_6_3"> 0 1 </var>
+    <var id="block_6_4"> 0 1 </var>
+    <var id="block_6_5"> 0 1 </var>
+    <var id="block_6_6"> 0 1 </var>
+    <var id="const_3_56"> 3 3 </var>
+    <var id="const_3_57"> 3 3 </var>
+    <var id="const_3_58"> 3 3 </var>
+    <var id="const_3_59"> 3 3 </var>
+    <var id="const_3_60"> 3 3 </var>
+    <var id="const_3_61"> 3 3 </var>
+    <var id="const_3_62"> 3 3 </var>
+    <var id="const_3_63"> 3 3 </var>
+    <var id="IV1470"> 0 1 </var>
+    <var id="IV1471"> 0 1 </var>
+    <var id="IV1472"> 0 1 </var>
+    <var id="IV1473"> 0 1 </var>
+    <var id="IV1474"> 0 1 </var>
+    <var id="IV1475"> 0 1 </var>
+    <var id="IV1476"> 0 1 </var>
+    <var id="const_1_71"> 1 1 </var>
+    <var id="aux_1"> 0 1000000 </var>
+    <var id="aux_2"> 0 1000000 </var>
+    <var id="aux_3"> 0 1000000 </var>
+    <var id="aux_4"> 0 1000000 </var>
+    <var id="aux_5"> 0 1000000 </var>
+    <var id="aux_6"> 0 1000000 </var>
+    <var id="aux_7"> 0 1000000 </var>
+    <var id="IV1477"> 0 1 </var>
+    <var id="IV1478"> 0 1 </var>
+    <var id="IV1479"> 0 1 </var>
+    <var id="IV1480"> 0 1 </var>
+    <var id="IV1481"> 0 1 </var>
+    <var id="IV1482"> 0 1 </var>
+    <var id="IV1483"> 0 1 </var>
+    <var id="const_1_86"> 1 1 </var>
+    <var id="aux_8"> 0 1000000 </var>
+    <var id="aux_9"> 0 1000000 </var>
+    <var id="aux_10"> 0 1000000 </var>
+    <var id="aux_11"> 0 1000000 </var>
+    <var id="aux_12"> 0 1000000 </var>
+    <var id="aux_13"> 0 1000000 </var>
+    <var id="aux_14"> 0 1000000 </var>
+    <var id="IV1484"> 0 1 </var>
+    <var id="IV1485"> 0 1 </var>
+    <var id="IV1486"> 0 1 </var>
+    <var id="IV1487"> 0 1 </var>
+    <var id="IV1488"> 0 1 </var>
+    <var id="IV1489"> 0 1 </var>
+    <var id="IV1490"> 0 1 </var>
+    <var id="const_1_101"> 1 1 </var>
+    <var id="aux_15"> 0 1000000 </var>
+    <var id="aux_16"> 0 1000000 </var>
+    <var id="aux_17"> 0 1000000 </var>
+    <var id="aux_18"> 0 1000000 </var>
+    <var id="aux_19"> 0 1000000 </var>
+    <var id="aux_20"> 0 1000000 </var>
+    <var id="aux_21"> 0 1000000 </var>
+    <var id="IV1491"> 0 1 </var>
+    <var id="IV1492"> 0 1 </var>
+    <var id="IV1493"> 0 1 </var>
+    <var id="IV1494"> 0 1 </var>
+    <var id="IV1495"> 0 1 </var>
+    <var id="IV1496"> 0 1 </var>
+    <var id="IV1497"> 0 1 </var>
+    <var id="const_1_116"> 1 1 </var>
+    <var id="aux_22"> 0 1000000 </var>
+    <var id="aux_23"> 0 1000000 </var>
+    <var id="aux_24"> 0 1000000 </var>
+    <var id="aux_25"> 0 1000000 </var>
+    <var id="aux_26"> 0 1000000 </var>
+    <var id="aux_27"> 0 1000000 </var>
+    <var id="aux_28"> 0 1000000 </var>
+    <var id="IV1498"> 0 1 </var>
+    <var id="IV1499"> 0 1 </var>
+    <var id="IV1500"> 0 1 </var>
+    <var id="IV1501"> 0 1 </var>
+    <var id="IV1502"> 0 1 </var>
+    <var id="IV1503"> 0 1 </var>
+    <var id="IV1504"> 0 1 </var>
+    <var id="const_1_131"> 1 1 </var>
+    <var id="aux_29"> 0 1000000 </var>
+    <var id="aux_30"> 0 1000000 </var>
+    <var id="aux_31"> 0 1000000 </var>
+    <var id="aux_32"> 0 1000000 </var>
+    <var id="aux_33"> 0 1000000 </var>
+    <var id="aux_34"> 0 1000000 </var>
+    <var id="aux_35"> 0 1000000 </var>
+    <var id="IV1505"> 0 1 </var>
+    <var id="IV1506"> 0 1 </var>
+    <var id="IV1507"> 0 1 </var>
+    <var id="IV1508"> 0 1 </var>
+    <var id="IV1509"> 0 1 </var>
+    <var id="IV1510"> 0 1 </var>
+    <var id="IV1511"> 0 1 </var>
+    <var id="const_1_146"> 1 1 </var>
+    <var id="aux_36"> 0 1000000 </var>
+    <var id="aux_37"> 0 1000000 </var>
+    <var id="aux_38"> 0 1000000 </var>
+    <var id="aux_39"> 0 1000000 </var>
+    <var id="aux_40"> 0 1000000 </var>
+    <var id="aux_41"> 0 1000000 </var>
+    <var id="aux_42"> 0 1000000 </var>
+    <var id="IV1512"> 0 1 </var>
+    <var id="IV1513"> 0 1 </var>
+    <var id="IV1514"> 0 1 </var>
+    <var id="IV1515"> 0 1 </var>
+    <var id="IV1516"> 0 1 </var>
+    <var id="IV1517"> 0 1 </var>
+    <var id="IV1518"> 0 1 </var>
+    <var id="const_1_161"> 1 1 </var>
+    <var id="aux_43"> 0 1000000 </var>
+    <var id="aux_44"> 0 1000000 </var>
+    <var id="aux_45"> 0 1000000 </var>
+    <var id="aux_46"> 0 1000000 </var>
+    <var id="aux_47"> 0 1000000 </var>
+    <var id="aux_48"> 0 1000000 </var>
+    <var id="aux_49"> 0 1000000 </var>
+    <var id="IV1519"> 0 1 </var>
+    <var id="IV1520"> 0 1 </var>
+    <var id="IV1521"> 0 1 </var>
+    <var id="IV1522"> 0 1 </var>
+    <var id="IV1523"> 0 1 </var>
+    <var id="IV1524"> 0 1 </var>
+    <var id="IV1525"> 0 1 </var>
+    <var id="const_1_176"> 1 1 </var>
+    <var id="aux_50"> 0 1000000 </var>
+    <var id="aux_51"> 0 1000000 </var>
+    <var id="aux_52"> 0 1000000 </var>
+    <var id="aux_53"> 0 1000000 </var>
+    <var id="aux_54"> 0 1000000 </var>
+    <var id="aux_55"> 0 1000000 </var>
+    <var id="aux_56"> 0 1000000 </var>
+    <var id="IV1526"> 0 1 </var>
+    <var id="IV1527"> 0 1 </var>
+    <var id="IV1528"> 0 1 </var>
+    <var id="IV1529"> 0 1 </var>
+    <var id="IV1530"> 0 1 </var>
+    <var id="IV1531"> 0 1 </var>
+    <var id="IV1532"> 0 1 </var>
+    <var id="const_1_191"> 1 1 </var>
+    <var id="aux_57"> 0 1000000 </var>
+    <var id="aux_58"> 0 1000000 </var>
+    <var id="aux_59"> 0 1000000 </var>
+    <var id="aux_60"> 0 1000000 </var>
+    <var id="aux_61"> 0 1000000 </var>
+    <var id="aux_62"> 0 1000000 </var>
+    <var id="aux_63"> 0 1000000 </var>
+    <var id="IV1533"> 0 1 </var>
+    <var id="IV1534"> 0 1 </var>
+    <var id="IV1535"> 0 1 </var>
+    <var id="IV1536"> 0 1 </var>
+    <var id="IV1537"> 0 1 </var>
+    <var id="IV1538"> 0 1 </var>
+    <var id="IV1539"> 0 1 </var>
+    <var id="const_1_206"> 1 1 </var>
+    <var id="aux_64"> 0 1000000 </var>
+    <var id="aux_65"> 0 1000000 </var>
+    <var id="aux_66"> 0 1000000 </var>
+    <var id="aux_67"> 0 1000000 </var>
+    <var id="aux_68"> 0 1000000 </var>
+    <var id="aux_69"> 0 1000000 </var>
+    <var id="aux_70"> 0 1000000 </var>
+    <var id="IV1540"> 0 1 </var>
+    <var id="IV1541"> 0 1 </var>
+    <var id="IV1542"> 0 1 </var>
+    <var id="IV1543"> 0 1 </var>
+    <var id="IV1544"> 0 1 </var>
+    <var id="IV1545"> 0 1 </var>
+    <var id="IV1546"> 0 1 </var>
+    <var id="const_1_221"> 1 1 </var>
+    <var id="aux_71"> 0 1000000 </var>
+    <var id="aux_72"> 0 1000000 </var>
+    <var id="aux_73"> 0 1000000 </var>
+    <var id="aux_74"> 0 1000000 </var>
+    <var id="aux_75"> 0 1000000 </var>
+    <var id="aux_76"> 0 1000000 </var>
+    <var id="aux_77"> 0 1000000 </var>
+    <var id="IV1547"> 0 1 </var>
+    <var id="IV1548"> 0 1 </var>
+    <var id="IV1549"> 0 1 </var>
+    <var id="IV1550"> 0 1 </var>
+    <var id="IV1551"> 0 1 </var>
+    <var id="IV1552"> 0 1 </var>
+    <var id="IV1553"> 0 1 </var>
+    <var id="const_1_236"> 1 1 </var>
+    <var id="aux_78"> 0 1000000 </var>
+    <var id="aux_79"> 0 1000000 </var>
+    <var id="aux_80"> 0 1000000 </var>
+    <var id="aux_81"> 0 1000000 </var>
+    <var id="aux_82"> 0 1000000 </var>
+    <var id="aux_83"> 0 1000000 </var>
+    <var id="aux_84"> 0 1000000 </var>
+    <var id="IV1554"> 0 1 </var>
+    <var id="IV1555"> 0 1 </var>
+    <var id="IV1556"> 0 1 </var>
+    <var id="IV1557"> 0 1 </var>
+    <var id="IV1558"> 0 1 </var>
+    <var id="IV1559"> 0 1 </var>
+    <var id="IV1560"> 0 1 </var>
+    <var id="const_1_251"> 1 1 </var>
+    <var id="aux_85"> 0 1000000 </var>
+    <var id="aux_86"> 0 1000000 </var>
+    <var id="aux_87"> 0 1000000 </var>
+    <var id="aux_88"> 0 1000000 </var>
+    <var id="aux_89"> 0 1000000 </var>
+    <var id="aux_90"> 0 1000000 </var>
+    <var id="aux_91"> 0 1000000 </var>
+    <var id="IV1561"> 0 1 </var>
+    <var id="IV1562"> 0 1 </var>
+    <var id="IV1563"> 0 1 </var>
+    <var id="IV1564"> 0 1 </var>
+    <var id="IV1565"> 0 1 </var>
+    <var id="IV1566"> 0 1 </var>
+    <var id="IV1567"> 0 1 </var>
+    <var id="const_1_266"> 1 1 </var>
+    <var id="aux_92"> 0 1000000 </var>
+    <var id="aux_93"> 0 1000000 </var>
+    <var id="aux_94"> 0 1000000 </var>
+    <var id="aux_95"> 0 1000000 </var>
+    <var id="aux_96"> 0 1000000 </var>
+    <var id="aux_97"> 0 1000000 </var>
+    <var id="aux_98"> 0 1000000 </var>
+    <var id="IV1568"> 0 1 </var>
+    <var id="IV1569"> 0 1 </var>
+    <var id="IV1570"> 0 1 </var>
+    <var id="IV1571"> 0 1 </var>
+    <var id="IV1572"> 0 1 </var>
+    <var id="IV1573"> 0 1 </var>
+    <var id="IV1574"> 0 1 </var>
+    <var id="const_1_281"> 1 1 </var>
+    <var id="aux_99"> 0 1000000 </var>
+    <var id="aux_100"> 0 1000000 </var>
+    <var id="aux_101"> 0 1000000 </var>
+    <var id="aux_102"> 0 1000000 </var>
+    <var id="aux_103"> 0 1000000 </var>
+    <var id="aux_104"> 0 1000000 </var>
+    <var id="aux_105"> 0 1000000 </var>
+    <var id="IV1575"> 0 1 </var>
+    <var id="IV1576"> 0 1 </var>
+    <var id="IV1577"> 0 1 </var>
+    <var id="IV1578"> 0 1 </var>
+    <var id="IV1579"> 0 1 </var>
+    <var id="IV1580"> 0 1 </var>
+    <var id="IV1581"> 0 1 </var>
+    <var id="const_1_296"> 1 1 </var>
+    <var id="aux_106"> 0 1000000 </var>
+    <var id="aux_107"> 0 1000000 </var>
+    <var id="aux_108"> 0 1000000 </var>
+    <var id="aux_109"> 0 1000000 </var>
+    <var id="aux_110"> 0 1000000 </var>
+    <var id="aux_111"> 0 1000000 </var>
+    <var id="aux_112"> 0 1000000 </var>
+    <var id="IV1582"> 0 1 </var>
+    <var id="IV1583"> 0 1 </var>
+    <var id="IV1584"> 0 1 </var>
+    <var id="IV1585"> 0 1 </var>
+    <var id="IV1586"> 0 1 </var>
+    <var id="IV1587"> 0 1 </var>
+    <var id="IV1588"> 0 1 </var>
+    <var id="const_1_311"> 1 1 </var>
+    <var id="aux_113"> 0 1000000 </var>
+    <var id="aux_114"> 0 1000000 </var>
+    <var id="aux_115"> 0 1000000 </var>
+    <var id="aux_116"> 0 1000000 </var>
+    <var id="aux_117"> 0 1000000 </var>
+    <var id="aux_118"> 0 1000000 </var>
+    <var id="aux_119"> 0 1000000 </var>
+    <var id="IV1589"> 0 1 </var>
+    <var id="IV1590"> 0 1 </var>
+    <var id="IV1591"> 0 1 </var>
+    <var id="IV1592"> 0 1 </var>
+    <var id="IV1593"> 0 1 </var>
+    <var id="IV1594"> 0 1 </var>
+    <var id="IV1595"> 0 1 </var>
+    <var id="const_1_326"> 1 1 </var>
+    <var id="aux_120"> 0 1000000 </var>
+    <var id="aux_121"> 0 1000000 </var>
+    <var id="aux_122"> 0 1000000 </var>
+    <var id="aux_123"> 0 1000000 </var>
+    <var id="aux_124"> 0 1000000 </var>
+    <var id="aux_125"> 0 1000000 </var>
+    <var id="aux_126"> 0 1000000 </var>
+    <var id="IV1596"> 0 1 </var>
+    <var id="IV1597"> 0 1 </var>
+    <var id="IV1598"> 0 1 </var>
+    <var id="IV1599"> 0 1 </var>
+    <var id="IV1600"> 0 1 </var>
+    <var id="IV1601"> 0 1 </var>
+    <var id="IV1602"> 0 1 </var>
+    <var id="const_1_341"> 1 1 </var>
+    <var id="aux_127"> 0 1000000 </var>
+    <var id="aux_128"> 0 1000000 </var>
+    <var id="aux_129"> 0 1000000 </var>
+    <var id="aux_130"> 0 1000000 </var>
+    <var id="aux_131"> 0 1000000 </var>
+    <var id="aux_132"> 0 1000000 </var>
+    <var id="aux_133"> 0 1000000 </var>
+    <var id="IV1603"> 0 1 </var>
+    <var id="IV1604"> 0 1 </var>
+    <var id="IV1605"> 0 1 </var>
+    <var id="IV1606"> 0 1 </var>
+    <var id="IV1607"> 0 1 </var>
+    <var id="IV1608"> 0 1 </var>
+    <var id="IV1609"> 0 1 </var>
+    <var id="const_1_356"> 1 1 </var>
+    <var id="aux_134"> 0 1000000 </var>
+    <var id="aux_135"> 0 1000000 </var>
+    <var id="aux_136"> 0 1000000 </var>
+    <var id="aux_137"> 0 1000000 </var>
+    <var id="aux_138"> 0 1000000 </var>
+    <var id="aux_139"> 0 1000000 </var>
+    <var id="aux_140"> 0 1000000 </var>
+    <var id="IV1610"> 0 1 </var>
+    <var id="IV1611"> 0 1 </var>
+    <var id="IV1612"> 0 1 </var>
+    <var id="IV1613"> 0 1 </var>
+    <var id="IV1614"> 0 1 </var>
+    <var id="IV1615"> 0 1 </var>
+    <var id="IV1616"> 0 1 </var>
+    <var id="const_1_371"> 1 1 </var>
+    <var id="aux_141"> 0 1000000 </var>
+    <var id="aux_142"> 0 1000000 </var>
+    <var id="aux_143"> 0 1000000 </var>
+    <var id="aux_144"> 0 1000000 </var>
+    <var id="aux_145"> 0 1000000 </var>
+    <var id="aux_146"> 0 1000000 </var>
+    <var id="aux_147"> 0 1000000 </var>
+    <var id="const_7_378"> 7 7 </var>
+  </variables>
+  <constraints>
+    <sum>
+      <list> block_0_0 block_0_1 block_0_2 block_0_3 block_0_4 block_0_5 block_0_6 </list>
+      <condition> (eq,const_3_8) </condition>
+    </sum>
+    <sum>
+      <list> block_1_0 block_1_1 block_1_2 block_1_3 block_1_4 block_1_5 block_1_6 </list>
+      <condition> (eq,const_3_16) </condition>
+    </sum>
+    <sum>
+      <list> block_2_0 block_2_1 block_2_2 block_2_3 block_2_4 block_2_5 block_2_6 </list>
+      <condition> (eq,const_3_24) </condition>
+    </sum>
+    <sum>
+      <list> block_3_0 block_3_1 block_3_2 block_3_3 block_3_4 block_3_5 block_3_6 </list>
+      <condition> (eq,const_3_32) </condition>
+    </sum>
+    <sum>
+      <list> block_4_0 block_4_1 block_4_2 block_4_3 block_4_4 block_4_5 block_4_6 </list>
+      <condition> (eq,const_3_40) </condition>
+    </sum>
+    <sum>
+      <list> block_5_0 block_5_1 block_5_2 block_5_3 block_5_4 block_5_5 block_5_6 </list>
+      <condition> (eq,const_3_48) </condition>
+    </sum>
+    <sum>
+      <list> block_6_0 block_6_1 block_6_2 block_6_3 block_6_4 block_6_5 block_6_6 </list>
+      <condition> (eq,const_3_56) </condition>
+    </sum>
+    <sum>
+      <list> block_0_0 block_1_0 block_2_0 block_3_0 block_4_0 block_5_0 block_6_0 </list>
+      <condition> (eq,const_3_57) </condition>
+    </sum>
+    <sum>
+      <list> block_0_1 block_1_1 block_2_1 block_3_1 block_4_1 block_5_1 block_6_1 </list>
+      <condition> (eq,const_3_58) </condition>
+    </sum>
+    <sum>
+      <list> block_0_2 block_1_2 block_2_2 block_3_2 block_4_2 block_5_2 block_6_2 </list>
+      <condition> (eq,const_3_59) </condition>
+    </sum>
+    <sum>
+      <list> block_0_3 block_1_3 block_2_3 block_3_3 block_4_3 block_5_3 block_6_3 </list>
+      <condition> (eq,const_3_60) </condition>
+    </sum>
+    <sum>
+      <list> block_0_4 block_1_4 block_2_4 block_3_4 block_4_4 block_5_4 block_6_4 </list>
+      <condition> (eq,const_3_61) </condition>
+    </sum>
+    <sum>
+      <list> block_0_5 block_1_5 block_2_5 block_3_5 block_4_5 block_5_5 block_6_5 </list>
+      <condition> (eq,const_3_62) </condition>
+    </sum>
+    <sum>
+      <list> block_0_6 block_1_6 block_2_6 block_3_6 block_4_6 block_5_6 block_6_6 </list>
+      <condition> (eq,const_3_63) </condition>
+    </sum>
+    <sum>
+      <list> IV1470 IV1471 IV1472 IV1473 IV1474 IV1475 IV1476 </list>
+      <condition> (eq,const_1_71) </condition>
+    </sum>
+    <intension> eq(aux_1,mul(block_0_0,block_1_0)) </intension>
+    <intension> eq(aux_1,IV1470) </intension>
+    <intension> eq(aux_2,mul(block_0_1,block_1_1)) </intension>
+    <intension> eq(aux_2,IV1471) </intension>
+    <intension> eq(aux_3,mul(block_0_2,block_1_2)) </intension>
+    <intension> eq(aux_3,IV1472) </intension>
+    <intension> eq(aux_4,mul(block_0_3,block_1_3)) </intension>
+    <intension> eq(aux_4,IV1473) </intension>
+    <intension> eq(aux_5,mul(block_0_4,block_1_4)) </intension>
+    <intension> eq(aux_5,IV1474) </intension>
+    <intension> eq(aux_6,mul(block_0_5,block_1_5)) </intension>
+    <intension> eq(aux_6,IV1475) </intension>
+    <intension> eq(aux_7,mul(block_0_6,block_1_6)) </intension>
+    <intension> eq(aux_7,IV1476) </intension>
+    <sum>
+      <list> IV1477 IV1478 IV1479 IV1480 IV1481 IV1482 IV1483 </list>
+      <condition> (eq,const_1_86) </condition>
+    </sum>
+    <intension> eq(aux_8,mul(block_0_0,block_2_0)) </intension>
+    <intension> eq(aux_8,IV1477) </intension>
+    <intension> eq(aux_9,mul(block_0_1,block_2_1)) </intension>
+    <intension> eq(aux_9,IV1478) </intension>
+    <intension> eq(aux_10,mul(block_0_2,block_2_2)) </intension>
+    <intension> eq(aux_10,IV1479) </intension>
+    <intension> eq(aux_11,mul(block_0_3,block_2_3)) </intension>
+    <intension> eq(aux_11,IV1480) </intension>
+    <intension> eq(aux_12,mul(block_0_4,block_2_4)) </intension>
+    <intension> eq(aux_12,IV1481) </intension>
+    <intension> eq(aux_13,mul(block_0_5,block_2_5)) </intension>
+    <intension> eq(aux_13,IV1482) </intension>
+    <intension> eq(aux_14,mul(block_0_6,block_2_6)) </intension>
+    <intension> eq(aux_14,IV1483) </intension>
+    <sum>
+      <list> IV1484 IV1485 IV1486 IV1487 IV1488 IV1489 IV1490 </list>
+      <condition> (eq,const_1_101) </condition>
+    </sum>
+    <intension> eq(aux_15,mul(block_0_0,block_3_0)) </intension>
+    <intension> eq(aux_15,IV1484) </intension>
+    <intension> eq(aux_16,mul(block_0_1,block_3_1)) </intension>
+    <intension> eq(aux_16,IV1485) </intension>
+    <intension> eq(aux_17,mul(block_0_2,block_3_2)) </intension>
+    <intension> eq(aux_17,IV1486) </intension>
+    <intension> eq(aux_18,mul(block_0_3,block_3_3)) </intension>
+    <intension> eq(aux_18,IV1487) </intension>
+    <intension> eq(aux_19,mul(block_0_4,block_3_4)) </intension>
+    <intension> eq(aux_19,IV1488) </intension>
+    <intension> eq(aux_20,mul(block_0_5,block_3_5)) </intension>
+    <intension> eq(aux_20,IV1489) </intension>
+    <intension> eq(aux_21,mul(block_0_6,block_3_6)) </intension>
+    <intension> eq(aux_21,IV1490) </intension>
+    <sum>
+      <list> IV1491 IV1492 IV1493 IV1494 IV1495 IV1496 IV1497 </list>
+      <condition> (eq,const_1_116) </condition>
+    </sum>
+    <intension> eq(aux_22,mul(block_0_0,block_4_0)) </intension>
+    <intension> eq(aux_22,IV1491) </intension>
+    <intension> eq(aux_23,mul(block_0_1,block_4_1)) </intension>
+    <intension> eq(aux_23,IV1492) </intension>
+    <intension> eq(aux_24,mul(block_0_2,block_4_2)) </intension>
+    <intension> eq(aux_24,IV1493) </intension>
+    <intension> eq(aux_25,mul(block_0_3,block_4_3)) </intension>
+    <intension> eq(aux_25,IV1494) </intension>
+    <intension> eq(aux_26,mul(block_0_4,block_4_4)) </intension>
+    <intension> eq(aux_26,IV1495) </intension>
+    <intension> eq(aux_27,mul(block_0_5,block_4_5)) </intension>
+    <intension> eq(aux_27,IV1496) </intension>
+    <intension> eq(aux_28,mul(block_0_6,block_4_6)) </intension>
+    <intension> eq(aux_28,IV1497) </intension>
+    <sum>
+      <list> IV1498 IV1499 IV1500 IV1501 IV1502 IV1503 IV1504 </list>
+      <condition> (eq,const_1_131) </condition>
+    </sum>
+    <intension> eq(aux_29,mul(block_0_0,block_5_0)) </intension>
+    <intension> eq(aux_29,IV1498) </intension>
+    <intension> eq(aux_30,mul(block_0_1,block_5_1)) </intension>
+    <intension> eq(aux_30,IV1499) </intension>
+    <intension> eq(aux_31,mul(block_0_2,block_5_2)) </intension>
+    <intension> eq(aux_31,IV1500) </intension>
+    <intension> eq(aux_32,mul(block_0_3,block_5_3)) </intension>
+    <intension> eq(aux_32,IV1501) </intension>
+    <intension> eq(aux_33,mul(block_0_4,block_5_4)) </intension>
+    <intension> eq(aux_33,IV1502) </intension>
+    <intension> eq(aux_34,mul(block_0_5,block_5_5)) </intension>
+    <intension> eq(aux_34,IV1503) </intension>
+    <intension> eq(aux_35,mul(block_0_6,block_5_6)) </intension>
+    <intension> eq(aux_35,IV1504) </intension>
+    <sum>
+      <list> IV1505 IV1506 IV1507 IV1508 IV1509 IV1510 IV1511 </list>
+      <condition> (eq,const_1_146) </condition>
+    </sum>
+    <intension> eq(aux_36,mul(block_0_0,block_6_0)) </intension>
+    <intension> eq(aux_36,IV1505) </intension>
+    <intension> eq(aux_37,mul(block_0_1,block_6_1)) </intension>
+    <intension> eq(aux_37,IV1506) </intension>
+    <intension> eq(aux_38,mul(block_0_2,block_6_2)) </intension>
+    <intension> eq(aux_38,IV1507) </intension>
+    <intension> eq(aux_39,mul(block_0_3,block_6_3)) </intension>
+    <intension> eq(aux_39,IV1508) </intension>
+    <intension> eq(aux_40,mul(block_0_4,block_6_4)) </intension>
+    <intension> eq(aux_40,IV1509) </intension>
+    <intension> eq(aux_41,mul(block_0_5,block_6_5)) </intension>
+    <intension> eq(aux_41,IV1510) </intension>
+    <intension> eq(aux_42,mul(block_0_6,block_6_6)) </intension>
+    <intension> eq(aux_42,IV1511) </intension>
+    <sum>
+      <list> IV1512 IV1513 IV1514 IV1515 IV1516 IV1517 IV1518 </list>
+      <condition> (eq,const_1_161) </condition>
+    </sum>
+    <intension> eq(aux_43,mul(block_1_0,block_2_0)) </intension>
+    <intension> eq(aux_43,IV1512) </intension>
+    <intension> eq(aux_44,mul(block_1_1,block_2_1)) </intension>
+    <intension> eq(aux_44,IV1513) </intension>
+    <intension> eq(aux_45,mul(block_1_2,block_2_2)) </intension>
+    <intension> eq(aux_45,IV1514) </intension>
+    <intension> eq(aux_46,mul(block_1_3,block_2_3)) </intension>
+    <intension> eq(aux_46,IV1515) </intension>
+    <intension> eq(aux_47,mul(block_1_4,block_2_4)) </intension>
+    <intension> eq(aux_47,IV1516) </intension>
+    <intension> eq(aux_48,mul(block_1_5,block_2_5)) </intension>
+    <intension> eq(aux_48,IV1517) </intension>
+    <intension> eq(aux_49,mul(block_1_6,block_2_6)) </intension>
+    <intension> eq(aux_49,IV1518) </intension>
+    <sum>
+      <list> IV1519 IV1520 IV1521 IV1522 IV1523 IV1524 IV1525 </list>
+      <condition> (eq,const_1_176) </condition>
+    </sum>
+    <intension> eq(aux_50,mul(block_1_0,block_3_0)) </intension>
+    <intension> eq(aux_50,IV1519) </intension>
+    <intension> eq(aux_51,mul(block_1_1,block_3_1)) </intension>
+    <intension> eq(aux_51,IV1520) </intension>
+    <intension> eq(aux_52,mul(block_1_2,block_3_2)) </intension>
+    <intension> eq(aux_52,IV1521) </intension>
+    <intension> eq(aux_53,mul(block_1_3,block_3_3)) </intension>
+    <intension> eq(aux_53,IV1522) </intension>
+    <intension> eq(aux_54,mul(block_1_4,block_3_4)) </intension>
+    <intension> eq(aux_54,IV1523) </intension>
+    <intension> eq(aux_55,mul(block_1_5,block_3_5)) </intension>
+    <intension> eq(aux_55,IV1524) </intension>
+    <intension> eq(aux_56,mul(block_1_6,block_3_6)) </intension>
+    <intension> eq(aux_56,IV1525) </intension>
+    <sum>
+      <list> IV1526 IV1527 IV1528 IV1529 IV1530 IV1531 IV1532 </list>
+      <condition> (eq,const_1_191) </condition>
+    </sum>
+    <intension> eq(aux_57,mul(block_1_0,block_4_0)) </intension>
+    <intension> eq(aux_57,IV1526) </intension>
+    <intension> eq(aux_58,mul(block_1_1,block_4_1)) </intension>
+    <intension> eq(aux_58,IV1527) </intension>
+    <intension> eq(aux_59,mul(block_1_2,block_4_2)) </intension>
+    <intension> eq(aux_59,IV1528) </intension>
+    <intension> eq(aux_60,mul(block_1_3,block_4_3)) </intension>
+    <intension> eq(aux_60,IV1529) </intension>
+    <intension> eq(aux_61,mul(block_1_4,block_4_4)) </intension>
+    <intension> eq(aux_61,IV1530) </intension>
+    <intension> eq(aux_62,mul(block_1_5,block_4_5)) </intension>
+    <intension> eq(aux_62,IV1531) </intension>
+    <intension> eq(aux_63,mul(block_1_6,block_4_6)) </intension>
+    <intension> eq(aux_63,IV1532) </intension>
+    <sum>
+      <list> IV1533 IV1534 IV1535 IV1536 IV1537 IV1538 IV1539 </list>
+      <condition> (eq,const_1_206) </condition>
+    </sum>
+    <intension> eq(aux_64,mul(block_1_0,block_5_0)) </intension>
+    <intension> eq(aux_64,IV1533) </intension>
+    <intension> eq(aux_65,mul(block_1_1,block_5_1)) </intension>
+    <intension> eq(aux_65,IV1534) </intension>
+    <intension> eq(aux_66,mul(block_1_2,block_5_2)) </intension>
+    <intension> eq(aux_66,IV1535) </intension>
+    <intension> eq(aux_67,mul(block_1_3,block_5_3)) </intension>
+    <intension> eq(aux_67,IV1536) </intension>
+    <intension> eq(aux_68,mul(block_1_4,block_5_4)) </intension>
+    <intension> eq(aux_68,IV1537) </intension>
+    <intension> eq(aux_69,mul(block_1_5,block_5_5)) </intension>
+    <intension> eq(aux_69,IV1538) </intension>
+    <intension> eq(aux_70,mul(block_1_6,block_5_6)) </intension>
+    <intension> eq(aux_70,IV1539) </intension>
+    <sum>
+      <list> IV1540 IV1541 IV1542 IV1543 IV1544 IV1545 IV1546 </list>
+      <condition> (eq,const_1_221) </condition>
+    </sum>
+    <intension> eq(aux_71,mul(block_1_0,block_6_0)) </intension>
+    <intension> eq(aux_71,IV1540) </intension>
+    <intension> eq(aux_72,mul(block_1_1,block_6_1)) </intension>
+    <intension> eq(aux_72,IV1541) </intension>
+    <intension> eq(aux_73,mul(block_1_2,block_6_2)) </intension>
+    <intension> eq(aux_73,IV1542) </intension>
+    <intension> eq(aux_74,mul(block_1_3,block_6_3)) </intension>
+    <intension> eq(aux_74,IV1543) </intension>
+    <intension> eq(aux_75,mul(block_1_4,block_6_4)) </intension>
+    <intension> eq(aux_75,IV1544) </intension>
+    <intension> eq(aux_76,mul(block_1_5,block_6_5)) </intension>
+    <intension> eq(aux_76,IV1545) </intension>
+    <intension> eq(aux_77,mul(block_1_6,block_6_6)) </intension>
+    <intension> eq(aux_77,IV1546) </intension>
+    <sum>
+      <list> IV1547 IV1548 IV1549 IV1550 IV1551 IV1552 IV1553 </list>
+      <condition> (eq,const_1_236) </condition>
+    </sum>
+    <intension> eq(aux_78,mul(block_2_0,block_3_0)) </intension>
+    <intension> eq(aux_78,IV1547) </intension>
+    <intension> eq(aux_79,mul(block_2_1,block_3_1)) </intension>
+    <intension> eq(aux_79,IV1548) </intension>
+    <intension> eq(aux_80,mul(block_2_2,block_3_2)) </intension>
+    <intension> eq(aux_80,IV1549) </intension>
+    <intension> eq(aux_81,mul(block_2_3,block_3_3)) </intension>
+    <intension> eq(aux_81,IV1550) </intension>
+    <intension> eq(aux_82,mul(block_2_4,block_3_4)) </intension>
+    <intension> eq(aux_82,IV1551) </intension>
+    <intension> eq(aux_83,mul(block_2_5,block_3_5)) </intension>
+    <intension> eq(aux_83,IV1552) </intension>
+    <intension> eq(aux_84,mul(block_2_6,block_3_6)) </intension>
+    <intension> eq(aux_84,IV1553) </intension>
+    <sum>
+      <list> IV1554 IV1555 IV1556 IV1557 IV1558 IV1559 IV1560 </list>
+      <condition> (eq,const_1_251) </condition>
+    </sum>
+    <intension> eq(aux_85,mul(block_2_0,block_4_0)) </intension>
+    <intension> eq(aux_85,IV1554) </intension>
+    <intension> eq(aux_86,mul(block_2_1,block_4_1)) </intension>
+    <intension> eq(aux_86,IV1555) </intension>
+    <intension> eq(aux_87,mul(block_2_2,block_4_2)) </intension>
+    <intension> eq(aux_87,IV1556) </intension>
+    <intension> eq(aux_88,mul(block_2_3,block_4_3)) </intension>
+    <intension> eq(aux_88,IV1557) </intension>
+    <intension> eq(aux_89,mul(block_2_4,block_4_4)) </intension>
+    <intension> eq(aux_89,IV1558) </intension>
+    <intension> eq(aux_90,mul(block_2_5,block_4_5)) </intension>
+    <intension> eq(aux_90,IV1559) </intension>
+    <intension> eq(aux_91,mul(block_2_6,block_4_6)) </intension>
+    <intension> eq(aux_91,IV1560) </intension>
+    <sum>
+      <list> IV1561 IV1562 IV1563 IV1564 IV1565 IV1566 IV1567 </list>
+      <condition> (eq,const_1_266) </condition>
+    </sum>
+    <intension> eq(aux_92,mul(block_2_0,block_5_0)) </intension>
+    <intension> eq(aux_92,IV1561) </intension>
+    <intension> eq(aux_93,mul(block_2_1,block_5_1)) </intension>
+    <intension> eq(aux_93,IV1562) </intension>
+    <intension> eq(aux_94,mul(block_2_2,block_5_2)) </intension>
+    <intension> eq(aux_94,IV1563) </intension>
+    <intension> eq(aux_95,mul(block_2_3,block_5_3)) </intension>
+    <intension> eq(aux_95,IV1564) </intension>
+    <intension> eq(aux_96,mul(block_2_4,block_5_4)) </intension>
+    <intension> eq(aux_96,IV1565) </intension>
+    <intension> eq(aux_97,mul(block_2_5,block_5_5)) </intension>
+    <intension> eq(aux_97,IV1566) </intension>
+    <intension> eq(aux_98,mul(block_2_6,block_5_6)) </intension>
+    <intension> eq(aux_98,IV1567) </intension>
+    <sum>
+      <list> IV1568 IV1569 IV1570 IV1571 IV1572 IV1573 IV1574 </list>
+      <condition> (eq,const_1_281) </condition>
+    </sum>
+    <intension> eq(aux_99,mul(block_2_0,block_6_0)) </intension>
+    <intension> eq(aux_99,IV1568) </intension>
+    <intension> eq(aux_100,mul(block_2_1,block_6_1)) </intension>
+    <intension> eq(aux_100,IV1569) </intension>
+    <intension> eq(aux_101,mul(block_2_2,block_6_2)) </intension>
+    <intension> eq(aux_101,IV1570) </intension>
+    <intension> eq(aux_102,mul(block_2_3,block_6_3)) </intension>
+    <intension> eq(aux_102,IV1571) </intension>
+    <intension> eq(aux_103,mul(block_2_4,block_6_4)) </intension>
+    <intension> eq(aux_103,IV1572) </intension>
+    <intension> eq(aux_104,mul(block_2_5,block_6_5)) </intension>
+    <intension> eq(aux_104,IV1573) </intension>
+    <intension> eq(aux_105,mul(block_2_6,block_6_6)) </intension>
+    <intension> eq(aux_105,IV1574) </intension>
+    <sum>
+      <list> IV1575 IV1576 IV1577 IV1578 IV1579 IV1580 IV1581 </list>
+      <condition> (eq,const_1_296) </condition>
+    </sum>
+    <intension> eq(aux_106,mul(block_3_0,block_4_0)) </intension>
+    <intension> eq(aux_106,IV1575) </intension>
+    <intension> eq(aux_107,mul(block_3_1,block_4_1)) </intension>
+    <intension> eq(aux_107,IV1576) </intension>
+    <intension> eq(aux_108,mul(block_3_2,block_4_2)) </intension>
+    <intension> eq(aux_108,IV1577) </intension>
+    <intension> eq(aux_109,mul(block_3_3,block_4_3)) </intension>
+    <intension> eq(aux_109,IV1578) </intension>
+    <intension> eq(aux_110,mul(block_3_4,block_4_4)) </intension>
+    <intension> eq(aux_110,IV1579) </intension>
+    <intension> eq(aux_111,mul(block_3_5,block_4_5)) </intension>
+    <intension> eq(aux_111,IV1580) </intension>
+    <intension> eq(aux_112,mul(block_3_6,block_4_6)) </intension>
+    <intension> eq(aux_112,IV1581) </intension>
+    <sum>
+      <list> IV1582 IV1583 IV1584 IV1585 IV1586 IV1587 IV1588 </list>
+      <condition> (eq,const_1_311) </condition>
+    </sum>
+    <intension> eq(aux_113,mul(block_3_0,block_5_0)) </intension>
+    <intension> eq(aux_113,IV1582) </intension>
+    <intension> eq(aux_114,mul(block_3_1,block_5_1)) </intension>
+    <intension> eq(aux_114,IV1583) </intension>
+    <intension> eq(aux_115,mul(block_3_2,block_5_2)) </intension>
+    <intension> eq(aux_115,IV1584) </intension>
+    <intension> eq(aux_116,mul(block_3_3,block_5_3)) </intension>
+    <intension> eq(aux_116,IV1585) </intension>
+    <intension> eq(aux_117,mul(block_3_4,block_5_4)) </intension>
+    <intension> eq(aux_117,IV1586) </intension>
+    <intension> eq(aux_118,mul(block_3_5,block_5_5)) </intension>
+    <intension> eq(aux_118,IV1587) </intension>
+    <intension> eq(aux_119,mul(block_3_6,block_5_6)) </intension>
+    <intension> eq(aux_119,IV1588) </intension>
+    <sum>
+      <list> IV1589 IV1590 IV1591 IV1592 IV1593 IV1594 IV1595 </list>
+      <condition> (eq,const_1_326) </condition>
+    </sum>
+    <intension> eq(aux_120,mul(block_3_0,block_6_0)) </intension>
+    <intension> eq(aux_120,IV1589) </intension>
+    <intension> eq(aux_121,mul(block_3_1,block_6_1)) </intension>
+    <intension> eq(aux_121,IV1590) </intension>
+    <intension> eq(aux_122,mul(block_3_2,block_6_2)) </intension>
+    <intension> eq(aux_122,IV1591) </intension>
+    <intension> eq(aux_123,mul(block_3_3,block_6_3)) </intension>
+    <intension> eq(aux_123,IV1592) </intension>
+    <intension> eq(aux_124,mul(block_3_4,block_6_4)) </intension>
+    <intension> eq(aux_124,IV1593) </intension>
+    <intension> eq(aux_125,mul(block_3_5,block_6_5)) </intension>
+    <intension> eq(aux_125,IV1594) </intension>
+    <intension> eq(aux_126,mul(block_3_6,block_6_6)) </intension>
+    <intension> eq(aux_126,IV1595) </intension>
+    <sum>
+      <list> IV1596 IV1597 IV1598 IV1599 IV1600 IV1601 IV1602 </list>
+      <condition> (eq,const_1_341) </condition>
+    </sum>
+    <intension> eq(aux_127,mul(block_4_0,block_5_0)) </intension>
+    <intension> eq(aux_127,IV1596) </intension>
+    <intension> eq(aux_128,mul(block_4_1,block_5_1)) </intension>
+    <intension> eq(aux_128,IV1597) </intension>
+    <intension> eq(aux_129,mul(block_4_2,block_5_2)) </intension>
+    <intension> eq(aux_129,IV1598) </intension>
+    <intension> eq(aux_130,mul(block_4_3,block_5_3)) </intension>
+    <intension> eq(aux_130,IV1599) </intension>
+    <intension> eq(aux_131,mul(block_4_4,block_5_4)) </intension>
+    <intension> eq(aux_131,IV1600) </intension>
+    <intension> eq(aux_132,mul(block_4_5,block_5_5)) </intension>
+    <intension> eq(aux_132,IV1601) </intension>
+    <intension> eq(aux_133,mul(block_4_6,block_5_6)) </intension>
+    <intension> eq(aux_133,IV1602) </intension>
+    <sum>
+      <list> IV1603 IV1604 IV1605 IV1606 IV1607 IV1608 IV1609 </list>
+      <condition> (eq,const_1_356) </condition>
+    </sum>
+    <intension> eq(aux_134,mul(block_4_0,block_6_0)) </intension>
+    <intension> eq(aux_134,IV1603) </intension>
+    <intension> eq(aux_135,mul(block_4_1,block_6_1)) </intension>
+    <intension> eq(aux_135,IV1604) </intension>
+    <intension> eq(aux_136,mul(block_4_2,block_6_2)) </intension>
+    <intension> eq(aux_136,IV1605) </intension>
+    <intension> eq(aux_137,mul(block_4_3,block_6_3)) </intension>
+    <intension> eq(aux_137,IV1606) </intension>
+    <intension> eq(aux_138,mul(block_4_4,block_6_4)) </intension>
+    <intension> eq(aux_138,IV1607) </intension>
+    <intension> eq(aux_139,mul(block_4_5,block_6_5)) </intension>
+    <intension> eq(aux_139,IV1608) </intension>
+    <intension> eq(aux_140,mul(block_4_6,block_6_6)) </intension>
+    <intension> eq(aux_140,IV1609) </intension>
+    <sum>
+      <list> IV1610 IV1611 IV1612 IV1613 IV1614 IV1615 IV1616 </list>
+      <condition> (eq,const_1_371) </condition>
+    </sum>
+    <intension> eq(aux_141,mul(block_5_0,block_6_0)) </intension>
+    <intension> eq(aux_141,IV1610) </intension>
+    <intension> eq(aux_142,mul(block_5_1,block_6_1)) </intension>
+    <intension> eq(aux_142,IV1611) </intension>
+    <intension> eq(aux_143,mul(block_5_2,block_6_2)) </intension>
+    <intension> eq(aux_143,IV1612) </intension>
+    <intension> eq(aux_144,mul(block_5_3,block_6_3)) </intension>
+    <intension> eq(aux_144,IV1613) </intension>
+    <intension> eq(aux_145,mul(block_5_4,block_6_4)) </intension>
+    <intension> eq(aux_145,IV1614) </intension>
+    <intension> eq(aux_146,mul(block_5_5,block_6_5)) </intension>
+    <intension> eq(aux_146,IV1615) </intension>
+    <intension> eq(aux_147,mul(block_5_6,block_6_6)) </intension>
+    <intension> eq(aux_147,IV1616) </intension>
+  </constraints>
+  <objectives>
+    <minimize> const_7_378 </minimize>
+  </objectives>
+</instance>

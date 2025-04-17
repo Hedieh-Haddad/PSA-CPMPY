@@ -1,0 +1,105 @@
+
+[93mACE v2.1 [0m
+
+  [94minstance[0m
+    name:lpcp21_p1_frog
+
+  Loading variables...
+
+  Loading constraints...
+
+  [94mdomains[0m
+    types:2  values:102  sizes:[2:51]
+  [94mvariables[0m
+    count:51  arrays:0  degrees:[1:50,2:1]
+  [94mconstraints[0m
+    count:52  specific:52  arities:[1:52]
+    distribution:[Extension1:50,ObjVarGEu:1,ObjVarLEu:1]
+    wck:0.14  cpu:0.445  mem:16M146
+  [94mobjective[0m
+    way:min  type:ObjVarLE  bounds:25..25
+
+  Building solver... 
+
+  [94msolver[0m
+    guaranteedAC:true
+    wck:0.15  cpu:0.455  mem:17M995
+
+  [94mpreprocessing[0m
+    effs:50  values:52  removedByAC:50  unsat:false
+    wck:0.0  cpu:0.456  mem:17M995
+
+[92mo 25[0m  0.15
+    run0  dpts:0..50  effs:51  wrgs:1  wck:0.00  bounds:25..24
+
+  [94mglobal[0m
+    effs:51
+    stop:FULL_EXPLORATION  wrgs:1  bound:25  boundWck:0.15  sols:1  sol1Cpu:0.456
+    wck:0.15  cpu:0.459  mem:18M341
+
+
+  Solution 1 in JSON format:
+   {
+    frog_0_0_0: 0,
+    frog_0_0_1: 0,
+    frog_0_0_2: 0,
+    frog_0_0_3: 0,
+    frog_0_0_4: 0,
+    frog_0_1_0: 0,
+    frog_0_1_1: 0,
+    frog_0_1_2: 0,
+    frog_0_1_3: 0,
+    frog_0_1_4: 0,
+    frog_0_2_0: 0,
+    frog_0_2_1: 1,
+    frog_0_2_2: 0,
+    frog_0_2_3: 0,
+    frog_0_2_4: 0,
+    frog_0_3_0: 0,
+    frog_0_3_1: 0,
+    frog_0_3_2: 0,
+    frog_0_3_3: 0,
+    frog_0_3_4: 0,
+    frog_0_4_0: 0,
+    frog_0_4_1: 0,
+    frog_0_4_2: 0,
+    frog_0_4_3: 0,
+    frog_0_4_4: 0,
+    free_0_0_0: 1,
+    free_0_0_1: 1,
+    free_0_0_2: 1,
+    free_0_0_3: 1,
+    free_0_0_4: 1,
+    free_0_1_0: 1,
+    free_0_1_1: 1,
+    free_0_1_2: 1,
+    free_0_1_3: 1,
+    free_0_1_4: 1,
+    free_0_2_0: 1,
+    free_0_2_1: 1,
+    free_0_2_2: 1,
+    free_0_2_3: 1,
+    free_0_2_4: 1,
+    free_0_3_0: 1,
+    free_0_3_1: 1,
+    free_0_3_2: 1,
+    free_0_3_3: 1,
+    free_0_3_4: 1,
+    free_0_4_0: 1,
+    free_0_4_1: 1,
+    free_0_4_2: 1,
+    free_0_4_3: 1,
+    free_0_4_4: 1,
+    const_var: 25
+   }
+
+[92ms OPTIMUM FOUND[0m
+[92m
+v[0m <instantiation id='sol1' type='solution' cost='25'> <list> frog_0_0_0 frog_0_0_1 frog_0_0_2 frog_0_0_3 frog_0_0_4 frog_0_1_0 frog_0_1_1 frog_0_1_2 frog_0_1_3 frog_0_1_4 frog_0_2_0 frog_0_2_1 frog_0_2_2 frog_0_2_3 frog_0_2_4 frog_0_3_0 frog_0_3_1 frog_0_3_2 frog_0_3_3 frog_0_3_4 frog_0_4_0 frog_0_4_1 frog_0_4_2 frog_0_4_3 frog_0_4_4 free_0_0_0 free_0_0_1 free_0_0_2 free_0_0_3 free_0_0_4 free_0_1_0 free_0_1_1 free_0_1_2 free_0_1_3 free_0_1_4 free_0_2_0 free_0_2_1 free_0_2_2 free_0_2_3 free_0_2_4 free_0_3_0 free_0_3_1 free_0_3_2 free_0_3_3 free_0_3_4 free_0_4_0 free_0_4_1 free_0_4_2 free_0_4_3 free_0_4_4 const_var </list> <values> 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 25 </values> </instantiation>
+[92m
+d WRONG DECISIONS[0m 1
+[92md FOUND SOLUTIONS[0m 1
+[92md BOUND[0m 25
+[92md COMPLETE EXPLORATION[0m
+
+c real time : 0.461
